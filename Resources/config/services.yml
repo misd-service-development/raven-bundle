@@ -1,0 +1,16 @@
+parameters:
+    raven_authentication_provider.class: Misd\RavenBundle\Security\Authentication\Provider\RavenAuthenticationProvider
+    raven_listener.class: Misd\RavenBundle\Security\Firewall\RavenListener
+    raven_user_provider.class: Misd\RavenBundle\Security\User\RavenUserProvider
+
+services:
+    raven.security.authentication.provider:
+        class: %raven_authentication_provider.class%
+        arguments: ['']
+
+    raven.security.authentication.listener:
+        class: %raven_listener.class%
+        arguments: [@security.context, @security.authentication.manager, @service_container]
+
+    raven_user_provider:
+        class: %raven_user_provider.class%
