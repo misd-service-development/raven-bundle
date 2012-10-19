@@ -128,8 +128,8 @@ class RavenListener implements ListenerInterface
     protected function requestAuthentication(GetResponseEvent $event, $url)
     {
         $params['ver'] = 2;
-        $params['url'] = $url;
-        $params['desc'] = $this->container->getParameter('misd_raven.description');
+        $params['url'] = urlencode($url);
+        $params['desc'] = urlencode($this->container->getParameter('misd_raven.description'));
 
         $parameters = array();
         foreach ($params as $key => $val) {
