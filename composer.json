@@ -1,7 +1,7 @@
 {
     "name":"misd/raven-bundle",
     "type":"symfony-bundle",
-    "description":"Allows Raven authentication",
+    "description":"Adds Raven authentication to your Symfony2 application",
     "keywords":["authentication", "bundle", "University of Cambridge"],
     "homepage":"https://github.com/misd-service-development/raven-bundle",
     "license":"MIT",
