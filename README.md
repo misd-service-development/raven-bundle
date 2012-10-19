@@ -15,7 +15,7 @@ The bundle uses code based on the [UcamWebauth PHP class](https://wiki.cam.ac.uk
 Requirements
 ------------
 
-* Symfony 2.1
+* [Symfony 2.1](http://symfony.com/)
 * [PHP OpenSSL library](http://www.php.net/manual/en/book.openssl.php)
 
 Installation
