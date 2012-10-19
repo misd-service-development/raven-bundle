@@ -96,7 +96,10 @@ class RavenListener implements ListenerInterface
             }
 
             if ($token->getAttribute('status') <> 200) {
-                throw new RavenException($message, null, $token->getAttribute('status'));
+                throw new RavenException(
+                    $token->getAttribute('msg') ? : $message,
+                    null,
+                    $token->getAttribute('status'));
             }
 
             $returnValue = $this->authenticationManager->authenticate($token);
