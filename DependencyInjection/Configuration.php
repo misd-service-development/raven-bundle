@@ -32,6 +32,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('description')->info('website description given to Raven')->example('"My App"')->end()
+                ->booleanNode('use_test_service')->info('whether to use the Raven test service')->defaultFalse()->end()
             ->end();
 
         return $treeBuilder;
