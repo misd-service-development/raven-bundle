@@ -14,6 +14,7 @@ namespace Misd\RavenBundle\Security\Authentication\Provider;
 use Exception;
 use Misd\RavenBundle\Security\Authentication\Token\RavenUserToken;
 use Misd\RavenBundle\Exception\RavenException;
+use Misd\RavenBundle\Service\RavenService;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -27,15 +28,18 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class RavenAuthenticationProvider implements AuthenticationProviderInterface
 {
     private $userProvider;
+    private $service;
 
     /**
      * Constructor.
      *
      * @param UserProviderInterface $userProvider User provider.
+     * @param RavenService          $service      Raven service.
      */
-    public function __construct(UserProviderInterface $userProvider)
+    public function __construct(UserProviderInterface $userProvider, RavenService $service)
     {
         $this->userProvider = $userProvider;
+        $this->service = $service;
     }
 
     /**
@@ -107,14 +111,7 @@ class RavenAuthenticationProvider implements AuthenticationProviderInterface
             )
         );
 
-        $key_filename = __DIR__ . '/../../../Resources/config/pubkey2.crt';
-        $key_file = fopen($key_filename, 'r');
-        if ($key_file === false) {
-            throw new Exception('Unable to open certificate file');
-        }
-        $key_str = fread($key_file, filesize($key_filename));
-        $key = openssl_pkey_get_public($key_str);
-        fclose($key_file);
+        $key = openssl_pkey_get_public($this->service->getCertificate());
 
         $result = openssl_verify($data, $sig, $key);
 

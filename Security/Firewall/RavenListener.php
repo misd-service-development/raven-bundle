@@ -11,7 +11,6 @@
 
 namespace Misd\RavenBundle\Security\Firewall;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -22,6 +21,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
 use Misd\RavenBundle\Exception\RavenException;
 use Misd\RavenBundle\Security\Authentication\Token\RavenUserToken;
+use Misd\RavenBundle\Service\RavenService;
 
 /**
  * RavenListener.
@@ -32,23 +32,27 @@ class RavenListener implements ListenerInterface
 {
     protected $securityContext;
     protected $authenticationManager;
-    protected $container;
+    protected $description;
+    protected $service;
 
     /**
      * Constructor.
      *
-     * @param SecurityContextInterface       $securityContext       Security context
-     * @param AuthenticationManagerInterface $authenticationManager Authentication manager
-     * @param ContainerInterface             $container             Container
+     * @param SecurityContextInterface       $securityContext       Security context.
+     * @param AuthenticationManagerInterface $authenticationManager Authentication manager.
+     * @param string                         $description           Resource description.
+     * @param RavenService                   $service               Raven service.
      */
     public function __construct(
         SecurityContextInterface $securityContext,
         AuthenticationManagerInterface $authenticationManager,
-        ContainerInterface $container
+        $description,
+        RavenService $service
     ) {
         $this->securityContext = $securityContext;
         $this->authenticationManager = $authenticationManager;
-        $this->container = $container;
+        $this->description = $description;
+        $this->service = $service;
     }
 
     /**
@@ -131,16 +135,14 @@ class RavenListener implements ListenerInterface
     {
         $params['ver'] = 2;
         $params['url'] = urlencode($url);
-        $params['desc'] = urlencode($this->container->getParameter('misd_raven.description'));
+        $params['desc'] = urlencode($this->description);
 
         $parameters = array();
         foreach ($params as $key => $val) {
             $parameters[] = $key . '=' . utf8_encode($val);
         }
-        $parameters = implode('&', $parameters);
+        $parameters = '?' . implode('&', $parameters);
 
-        $url = 'https://raven.cam.ac.uk/auth/authenticate.html?' . $parameters;
-
-        $event->setResponse(new RedirectResponse($url));
+        $event->setResponse(new RedirectResponse($this->service->getUrl() . $parameters));
     }
 }

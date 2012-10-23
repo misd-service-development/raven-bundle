@@ -8,11 +8,11 @@ parameters:
 services:
     raven.security.authentication.provider:
         class: %raven_authentication_provider.class%
-        arguments: ['']
+        arguments: ['', @raven_service]
 
     raven.security.authentication.listener:
         class: %raven_listener.class%
-        arguments: [@security.context, @security.authentication.manager, @service_container]
+        arguments: [@security.context, @security.authentication.manager, %misd_raven.description%, @raven_service]
 
     raven_user_provider:
         class: %raven_user_provider.class%
