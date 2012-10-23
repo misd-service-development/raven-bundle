@@ -25,7 +25,7 @@ class RavenUserProvider implements UserProviderInterface
     /**
      * {@inheritdoc}
      *
-     * @return RavenUser Raven user
+     * @return RavenUser Raven user.
      */
     public function loadUserByUsername($username)
     {
@@ -35,7 +35,7 @@ class RavenUserProvider implements UserProviderInterface
     /**
      * {@inheritdoc}
      *
-     * @return RavenUser Raven user
+     * @return RavenUser Raven user.
      */
     public function refreshUser(UserInterface $user)
     {

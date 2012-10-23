@@ -29,8 +29,8 @@ final class RavenUser implements UserInterface
     /**
      * Constructor.
      *
-     * @param string $username Username (=CRSid)
-     * @param array $roles Roles
+     * @param string $username Username (=CRSid).
+     * @param array  $roles    Roles.
      *
      * @throws InvalidArgumentException
      */

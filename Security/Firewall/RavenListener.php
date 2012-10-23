@@ -124,8 +124,8 @@ class RavenListener implements ListenerInterface
     /**
      * Request Raven authentication.
      *
-     * @param GetResponseEvent $event Get response event
-     * @param string           $url   Redirect URL
+     * @param GetResponseEvent $event Get response event.
+     * @param string           $url   Redirect URL.
      */
     protected function requestAuthentication(GetResponseEvent $event, $url)
     {

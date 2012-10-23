@@ -31,7 +31,7 @@ class RavenAuthenticationProvider implements AuthenticationProviderInterface
     /**
      * Constructor.
      *
-     * @param UserProviderInterface $userProvider User provider
+     * @param UserProviderInterface $userProvider User provider.
      */
     public function __construct(UserProviderInterface $userProvider)
     {
@@ -64,8 +64,10 @@ class RavenAuthenticationProvider implements AuthenticationProviderInterface
     /**
      * Validate RavenUserToken.
      *
-     * @param RavenUserToken $token Raven user token
-     * @return bool true if the token is valid, false otherwise
+     * @param RavenUserToken $token Raven user token.
+     *
+     * @return bool true if the token is valid, false otherwise.
+     *
      * @throws Exception
      */
     protected function validateToken(RavenUserToken $token)

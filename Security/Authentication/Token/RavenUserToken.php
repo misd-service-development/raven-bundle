@@ -24,8 +24,8 @@ class RavenUserToken extends AbstractToken
     /**
      * Constructor.
      *
-     * @param string $uid User ID
-     * @param array $roles Roles
+     * @param string $uid   User ID.
+     * @param array  $roles Roles.
      */
     public function __construct($uid = '', array $roles = array())
     {
@@ -41,8 +41,9 @@ class RavenUserToken extends AbstractToken
     /**
      * Build a token from a WLS response.
      *
-     * @param string $wlsResponse WLS response
-     * @return RavenUserToken Token
+     * @param string $wlsResponse WLS response.
+     *
+     * @return RavenUserToken Token.
      */
     public static function factory($wlsResponse)
     {
@@ -55,18 +56,18 @@ class RavenUserToken extends AbstractToken
 
         $token->setAttributes(
             array(
-                'ver' => (int)$ver,
-                'status' => (int)$status,
-                'msg' => $msg != '' ? (string)$msg : null,
+                'ver' => (int) $ver,
+                'status' => (int) $status,
+                'msg' => $msg != '' ? (string) $msg : null,
                 'issue' => new DateTime($issue),
-                'id' => (string)$id,
-                'url' => (string)$url,
-                'auth' => $auth != '' ? (string)$auth : null,
-                'sso' => (string)$sso,
-                'life' => $life != '' ? (int)$life : null,
-                'params' => $params != '' ? (string)$params : null,
-                'kid' => (int)$kid,
-                'sig' => (string)$sig,
+                'id' => (string) $id,
+                'url' => (string) $url,
+                'auth' => $auth != '' ? (string) $auth : null,
+                'sso' => (string) $sso,
+                'life' => $life != '' ? (int) $life : null,
+                'params' => $params != '' ? (string) $params : null,
+                'kid' => (int) $kid,
+                'sig' => (string) $sig,
             )
         );
 
