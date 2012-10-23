@@ -111,3 +111,14 @@ You can add the name of your application to the Raven log in page:
         description: "My application"
 
 The text on the page will now include something like "This resource calls itself 'My application' and is ...".
+
+### Test Raven service
+
+During development, especially when not on the University network, it is sometimes necessary to use the [test Raven Service](http://raven.cam.ac.uk/project/test-demo/). You can use this instead of the live service:
+
+    // app/config/config_dev.yml
+
+    misd_raven:
+        use_test_service: true
+
+The test Raven service **must not** be used in production: it might compromise your application. Keep it to `config_dev.yml`!
