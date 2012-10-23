@@ -38,5 +38,14 @@ class MisdRavenExtension extends Extension
             'misd_raven.description',
             isset($config['description']) ? $config['description'] : null
         );
+        $container->setParameter('misd_raven.test_service', $config['use_test_service']);
+        $container->setParameter(
+            'raven_service.class',
+            true === $container->getParameter('misd_raven.test_service') ? $container->getParameter(
+                'raven_test_service.class'
+            ) : $container->getParameter(
+                'raven_live_service.class'
+            )
+        );
     }
 }

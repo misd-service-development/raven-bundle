@@ -2,6 +2,8 @@ parameters:
     raven_authentication_provider.class: Misd\RavenBundle\Security\Authentication\Provider\RavenAuthenticationProvider
     raven_listener.class: Misd\RavenBundle\Security\Firewall\RavenListener
     raven_user_provider.class: Misd\RavenBundle\Security\User\RavenUserProvider
+    raven_live_service.class: Misd\RavenBundle\Service\LiveRavenService
+    raven_test_service.class: Misd\RavenBundle\Service\TestRavenService
 
 services:
     raven.security.authentication.provider:
@@ -14,3 +16,6 @@ services:
 
     raven_user_provider:
         class: %raven_user_provider.class%
+
+    raven_service:
+        class: %raven_service.class%
