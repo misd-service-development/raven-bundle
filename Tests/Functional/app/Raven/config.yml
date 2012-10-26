@@ -1,0 +1,15 @@
+imports:
+    - { resource: ./../config/default.yml }
+
+security:
+    providers:
+        raven:
+            id: raven_user_provider
+    firewalls:
+        raven_secured:
+            pattern: ^/secured(/.*)?
+            raven: true
+
+misd_raven:
+    description: "My application"
+    use_test_service: true
