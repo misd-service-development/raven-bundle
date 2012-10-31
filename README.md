@@ -124,3 +124,22 @@ During development, especially when not on the University network, it is sometim
         use_test_service: true
 
 The test Raven service **must not** be used in production: it might compromise your application. Keep it to `config_dev.yml`!
+
+Exceptions
+----------
+
+The bundle can throw various exceptions. To catch them, set up [event listeners](http://symfony.com/doc/2.1/cookbook/service_container/event_listener.html) and implement your logic (display a message, redirect to another page etc).
+
+### `Misd\RavenBundle\Exception\AuthenticationCancelledException`
+
+This is thrown if the user clicks 'cancel' on the Raven log in screen.
+
+### `Symfony\Component\Security\Core\Exception\UsernameNotFoundException`
+
+This is thrown if the user is not provisioned. If you're using the Raven user provider, this will never been seen.
+
+### `Misd\RavenBundle\Exception\RavenException`
+
+This is thrown if something has gone wrong with either the bundle or Raven itself. As this is an exceptional state, you probably won't need to catch it (and let the `500 Internal Server Error` be returned). It has the following sub-types:
+
+* `Misd\RavenBundle\Exception\LoginTimedOutException`: If the Raven response is older than 30 seconds.
