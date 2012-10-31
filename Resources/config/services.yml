@@ -4,6 +4,8 @@ parameters:
     raven_user_provider.class: Misd\RavenBundle\Security\User\RavenUserProvider
     raven_live_service.class: Misd\RavenBundle\Service\LiveRavenService
     raven_test_service.class: Misd\RavenBundle\Service\TestRavenService
+    raven_exception_listener.class: Misd\RavenBundle\Listener\RavenExceptionListener
+    raven_request_listener.class: Misd\RavenBundle\Listener\RavenRequestListener
 
 services:
     raven.security.authentication.provider:
@@ -19,3 +21,13 @@ services:
 
     raven_service:
         class: %raven_service.class%
+
+    kernel.listener.raven_exception:
+        class: %raven_exception_listener.class%
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+
+    kernel.listener.raven_request:
+        class: %raven_request_listener.class%
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 9 }
