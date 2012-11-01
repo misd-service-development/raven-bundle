@@ -1,0 +1,3 @@
+service:
+    pattern: /auth/authenticate.html
+    defaults: { _controller: RavenBundle:Main:authenticate }
