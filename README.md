@@ -1,6 +1,8 @@
 MisdRavenBundle
 ===============
 
+[![Build Status](https://secure.travis-ci.org/misd-service-development/raven-bundle.png)](http://travis-ci.org/misd-service-development/raven-bundle)
+
 This bundle contains a Symfony2 authentication provider so that users can log in to a Symfony2 application through [Raven](http://raven.cam.ac.uk/), the University of Cambridge's central authentication service.
 
 It also contains a user provider, which can allow any user authenticating through Raven access to your application.
