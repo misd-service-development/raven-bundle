@@ -14,6 +14,7 @@ namespace Misd\RavenBundle\Security\Authentication\Provider;
 use Exception;
 use Misd\RavenBundle\Security\Authentication\Token\RavenUserToken;
 use Misd\RavenBundle\Exception\RavenException;
+use Misd\RavenBundle\Exception\LoginTimedOutException;
 use Misd\RavenBundle\Service\RavenService;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -47,6 +48,10 @@ class RavenAuthenticationProvider implements AuthenticationProviderInterface
      */
     public function authenticate(TokenInterface $token)
     {
+        if ((time() - $token->getAttribute('issue')->getTimestamp() > 30)) {
+            throw new LoginTimedOutException();
+        }
+
         $user = $this->userProvider->loadUserByUsername($token->getUsername());
 
         if (
@@ -54,15 +59,10 @@ class RavenAuthenticationProvider implements AuthenticationProviderInterface
             200 === $token->getAttribute('status') &&
             true === $this->validateToken($token)
         ) {
-            if ((time() - $token->getAttribute('issue')->getTimestamp() > 30)) {
-                throw new RavenException('Login attempt timed out');
-            }
-            $authenticatedToken = new RavenUserToken($user, $user->getRoles());
-
-            return $authenticatedToken;
+            return new RavenUserToken($user, $user->getRoles());
         }
 
-        throw new RavenException('The Raven authentication failed.');
+        throw new RavenException('Raven authentication failed.');
     }
 
     /**

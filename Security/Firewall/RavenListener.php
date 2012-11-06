@@ -20,6 +20,7 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
 use Misd\RavenBundle\Exception\RavenException;
+use Misd\RavenBundle\Exception\AuthenticationCancelledException;
 use Misd\RavenBundle\Security\Authentication\Token\RavenUserToken;
 use Misd\RavenBundle\Service\RavenService;
 
@@ -61,55 +62,53 @@ class RavenListener implements ListenerInterface
     public function handle(GetResponseEvent $event)
     {
         $request = $event->getRequest();
+        $session = $request->getSession();
 
-        if ($request->query->has('WLS-Response')) {
+        if ($session->has('wls_response')) {
             // There's a Raven response to process
 
-            $token = RavenUserToken::factory($request->query->get('WLS-Response'));
-            $redirect = $token->getAttribute('url');
+            $token = RavenUserToken::factory($session->get('wls_response'));
+            $session->remove('wls_response');
 
             switch ($token->getAttribute('status')) {
                 case 200:
-                    $message = 'Successful authentication';
+                    // Successful authentication
                     break;
                 case 410:
-                    $message = 'The user cancelled the authentication request';
-                    break;
-                case 510:
-                    $message = 'No mutually acceptable authentication types available';
-                    break;
-                case 520:
-                    $message = 'Unsupported protocol version';
-                    break;
-                case 530:
-                    $message = 'General request parameter error';
-                    break;
-                case 540:
-                    $message = 'Interaction would be required';
-                    break;
-                case 560:
-                    $message = 'WAA not authorised';
-                    break;
-                case 570:
-                    $message = 'Authentication declined';
+                    throw new AuthenticationCancelledException();
                     break;
                 default:
-                    $message = 'Unknown status code';
+                    switch ($token->getAttribute('status')) {
+                        case 510:
+                            $message = 'No mutually acceptable authentication types available';
+                            break;
+                        case 520:
+                            $message = 'Unsupported protocol version';
+                            break;
+                        case 530:
+                            $message = 'General request parameter error';
+                            break;
+                        case 540:
+                            $message = 'Interaction would be required';
+                            break;
+                        case 560:
+                            $message = 'WAA not authorised';
+                            break;
+                        case 570:
+                            $message = 'Authentication declined';
+                            break;
+                        default:
+                            $message = null;
+                            break;
+                    }
+                    throw new RavenException($message, null, $token->getAttribute('status'));
                     break;
-            }
-
-            if ($token->getAttribute('status') <> 200) {
-                throw new RavenException(
-                    $token->getAttribute('msg') ? : $message,
-                    null,
-                    $token->getAttribute('status'));
             }
 
             $returnValue = $this->authenticationManager->authenticate($token);
 
             if ($returnValue instanceof TokenInterface) {
                 $this->securityContext->setToken($returnValue);
-                $event->setResponse(new RedirectResponse($redirect));
             } elseif ($returnValue instanceof Response) {
                 $event->setResponse($returnValue);
             } else {
