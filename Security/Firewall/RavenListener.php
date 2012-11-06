@@ -62,12 +62,13 @@ class RavenListener implements ListenerInterface
     public function handle(GetResponseEvent $event)
     {
         $request = $event->getRequest();
+        $session = $request->getSession();
 
-        if ($request->query->has('WLS-Response')) {
+        if ($session->has('wls_response')) {
             // There's a Raven response to process
 
-            $token = RavenUserToken::factory($request->query->get('WLS-Response'));
-            $redirect = $token->getAttribute('url');
+            $token = RavenUserToken::factory($session->get('wls_response'));
+            $session->remove('wls_response');
 
             switch ($token->getAttribute('status')) {
                 case 200:
@@ -108,7 +109,6 @@ class RavenListener implements ListenerInterface
 
             if ($returnValue instanceof TokenInterface) {
                 $this->securityContext->setToken($returnValue);
-                $event->setResponse(new RedirectResponse($redirect));
             } elseif ($returnValue instanceof Response) {
                 $event->setResponse($returnValue);
             } else {

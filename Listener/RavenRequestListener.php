@@ -12,6 +12,7 @@
 namespace Misd\RavenBundle\Listener;
 
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * RavenRequestListener.
@@ -21,23 +22,24 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 class RavenRequestListener
 {
     /**
-     * Watch for Raven-related exceptions stored in the session.
+     * Watch for the Raven response, store it in the session and redirect back
+     * to the same page.
      *
      * @param GetResponseEvent $event
-     *
-     * @throws \Exception
-     *
-     * @see RavenExceptionListener::onKernelException
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
 
-        if ($request->getSession()->has('raven_exception')) {
-            $exception = $request->getSession()->get('raven_exception');
-            $event->getRequest()->getSession()->remove('raven_exception');
-
-            throw $exception;
+        if ($request->query->has('WLS-Response')) {
+            $wlsResponse = $request->query->get('WLS-Response');
+            $request->query->remove('WLS-Response');
+            $uri = $request->getSchemeAndHttpHost() . $request->getBaseUrl() . $request->getPathInfo();
+            if ($request->query->count() > 0) {
+                $uri .= '?' . http_build_query($request->query->all());
+            }
+            $event->getRequest()->getSession()->set('wls_response', $wlsResponse);
+            $event->setResponse(new RedirectResponse($uri));
         }
     }
 }
