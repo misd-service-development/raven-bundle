@@ -109,8 +109,9 @@ Y6iyl0/GyBRzAXYemQJAVeChw15Lj2/uE7HIDtkqd8POzXjumOxKPfESSHKxRGnP
                 base64_encode($signature)
             );
 
+        $response['url'] = urlencode($response['url']);
         $response['sig'] = $signature;
 
-        return $url . '?WLS-Response=' . implode('!', $response);
+        return $url . (false !== strpos($url, '?') ? '&' : '?') . 'WLS-Response=' . implode('!', $response);
     }
 }
