@@ -33,7 +33,7 @@ class RavenTest extends WebTestCase
         return self::$kernel->getContainer()->get('router')->generate($name, $parameters, $absolute);
     }
 
-    public function testWelcome()
+    public function test200Response()
     {
         $client = $this->createClient();
 
@@ -44,6 +44,10 @@ class RavenTest extends WebTestCase
         $crawler = $client->followRedirect();
         $crawler = $client->followRedirect();
         $crawler = $client->followRedirect();
+        $this->assertContains('This is secured. You are', $crawler->text());
+        $this->assertEquals($this->route('secured', array(), true), $client->getRequest()->getUri());
+
+        $crawler = $client->request('GET', $this->route('secured'));
         $this->assertContains('This is secured. You are', $crawler->text());
         $this->assertEquals($this->route('secured', array(), true), $client->getRequest()->getUri());
 
@@ -58,6 +62,138 @@ class RavenTest extends WebTestCase
             $this->route('secured', array('param1' => 'foo', 'param2' => 'bar'), true),
             $client->getRequest()->getUri()
         );
+    }
+
+    /**
+     * @expectedException \Misd\RavenBundle\Exception\RavenException
+     */
+    public function test200InvalidResponse()
+    {
+        $client = $this->createClient();
+
+        $client->request('GET', $this->route('secured'));
+        $client->request('GET', $client->getResponse()->getTargetUrl() . '&problem=invalid');
+        $client->followRedirect();
+        $client->followRedirect();
+    }
+
+    /**
+     * @expectedException \Misd\RavenBundle\Exception\AuthenticationCancelledException
+     */
+    public function test410Response()
+    {
+        $client = $this->createClient();
+
+        $client->request('GET', $this->route('secured'));
+        $client->request('GET', $client->getResponse()->getTargetUrl() . '&status=410');
+        $client->followRedirect();
+        $client->followRedirect();
+    }
+
+    /**
+     * @expectedException \Misd\RavenBundle\Exception\RavenException
+     */
+    public function test510Response()
+    {
+        $client = $this->createClient();
+
+        $client->request('GET', $this->route('secured'));
+        $client->request('GET', $client->getResponse()->getTargetUrl() . '&status=510');
+        $client->followRedirect();
+        $client->followRedirect();
+    }
+
+    /**
+     * @expectedException \Misd\RavenBundle\Exception\RavenException
+     */
+    public function test520Response()
+    {
+        $client = $this->createClient();
+
+        $client->request('GET', $this->route('secured'));
+        $client->request('GET', $client->getResponse()->getTargetUrl() . '&status=520');
+        $client->followRedirect();
+        $client->followRedirect();
+    }
+
+    /**
+     * @expectedException \Misd\RavenBundle\Exception\RavenException
+     */
+    public function test530Response()
+    {
+        $client = $this->createClient();
+
+        $client->request('GET', $this->route('secured'));
+        $client->request('GET', $client->getResponse()->getTargetUrl() . '&status=530');
+        $client->followRedirect();
+        $client->followRedirect();
+    }
+
+    /**
+     * @expectedException \Misd\RavenBundle\Exception\RavenException
+     */
+    public function test540Response()
+    {
+        $client = $this->createClient();
+
+        $client->request('GET', $this->route('secured'));
+        $client->request('GET', $client->getResponse()->getTargetUrl() . '&status=540');
+        $client->followRedirect();
+        $client->followRedirect();
+    }
+
+    /**
+     * @expectedException \Misd\RavenBundle\Exception\RavenException
+     */
+    public function test560Response()
+    {
+        $client = $this->createClient();
+
+        $client->request('GET', $this->route('secured'));
+        $client->request('GET', $client->getResponse()->getTargetUrl() . '&status=560');
+        $client->followRedirect();
+        $client->followRedirect();
+    }
+
+    /**
+     * @expectedException \Misd\RavenBundle\Exception\RavenException
+     */
+    public function test570Response()
+    {
+        $client = $this->createClient();
+
+        $client->request('GET', $this->route('secured'));
+        $client->request('GET', $client->getResponse()->getTargetUrl() . '&status=570');
+        $client->followRedirect();
+        $client->followRedirect();
+    }
+
+    /**
+     * @expectedException \Misd\RavenBundle\Exception\RavenException
+     */
+    public function testUnknownResponse()
+    {
+        $client = $this->createClient();
+
+        $client->request('GET', $this->route('secured'));
+        $client->request('GET', $client->getResponse()->getTargetUrl() . '&status=999');
+        $client->followRedirect();
+        $client->followRedirect();
+    }
+
+    /**
+     * @expectedException \Misd\RavenBundle\Exception\LoginTimedOutException
+     * @group slow
+     */
+    public function testTimedOutResponse()
+    {
+        $client = $this->createClient();
+
+        $client->request('GET', '/secured');
+        $client->request('GET', $client->getResponse()->getTargetUrl());
+        $client->followRedirect();
+        sleep(35);
+        $client->followRedirect();
     }
 
     protected function setUp()

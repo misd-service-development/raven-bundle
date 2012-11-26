@@ -24,8 +24,10 @@ class MainController extends ContainerAware
     /**
      * Authenticate action.
      *
-     * This replicates logging in to Raven. It has an additional parameter
-     * 'status', which defines the expected result.
+     * This replicates logging in to Raven. It has additional parameters:
+     *
+     * - 'status' defines the expected result
+     * - 'problem' defines the expected problem
      *
      * @return RedirectResponse
      */
@@ -33,13 +35,22 @@ class MainController extends ContainerAware
     {
         $query = $this->container->get('request')->query;
 
-        $redirect = $this->createRedirect($query->get('ver'), $query->get('url'), $query->get('status', 200));
+        $redirect = $this->createRedirect(
+            $query->get('ver'),
+            $query->get('url'),
+            $query->get('status', 200),
+            $query->get('problem')
+        );
 
         return new RedirectResponse($redirect);
     }
 
-    protected function createRedirect($ver, $url, $status = 200)
+    protected function createRedirect($ver, $url, $status = 200, $problem = null)
     {
+        if (false === in_array($status, array(200, 410, 510, 520, 530, 540, 560, 570, 999))) {
+            $status = 200;
+        }
+
         $response = array();
         $response['ver'] = $ver;
         $response['status'] = $status;
@@ -111,6 +122,11 @@ Y6iyl0/GyBRzAXYemQJAVeChw15Lj2/uE7HIDtkqd8POzXjumOxKPfESSHKxRGnP
 
         $response['url'] = urlencode($response['url']);
         $response['sig'] = $signature;
+
+        if ('invalid' === $problem) {
+            // need an invalid response, so just need to change a value
+            $response['id'] = 12312424;
+        }
 
         return $url . (false !== strpos($url, '?') ? '&' : '?') . 'WLS-Response=' . implode('!', $response);
     }
