@@ -20,9 +20,12 @@ namespace Misd\RavenBundle\Tests\Functional;
  */
 class RavenTest extends WebTestCase
 {
+    protected static $testCase = 'Raven';
+    protected static $config = 'config.yml';
+
     protected static function createClient()
     {
-        return parent::createClient(array('test_case' => 'Raven', 'root_config' => 'config.yml'));
+        return parent::createClient(array('test_case' => self::$testCase, 'root_config' => self::$config));
     }
 
     public function testWelcome()
@@ -43,13 +46,13 @@ class RavenTest extends WebTestCase
     {
         parent::setUp();
 
-        $this->deleteTmpDir('RavenTest');
+        $this->deleteTmpDir(self::$testCase);
     }
 
     protected function tearDown()
     {
         parent::tearDown();
 
-        $this->deleteTmpDir('RavenTest');
+        $this->deleteTmpDir(self::$testCase);
     }
 }
