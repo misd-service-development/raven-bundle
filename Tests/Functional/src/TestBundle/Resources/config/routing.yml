@@ -1,7 +1,7 @@
-test_unsecured:
+unsecured:
     pattern: /
     defaults: { _controller: TestBundle:Test:unsecured }
 
-test_secured:
+secured:
     pattern: /secured
     defaults: { _controller: TestBundle:Test:secured }

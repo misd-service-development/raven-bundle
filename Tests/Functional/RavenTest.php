@@ -28,14 +28,19 @@ class RavenTest extends WebTestCase
         return parent::createClient(array('test_case' => self::$testCase, 'root_config' => self::$config));
     }
 
+    protected function route($name, $parameters = array(), $absolute = false)
+    {
+        return self::$kernel->getContainer()->get('router')->generate($name, $parameters, $absolute);
+    }
+
     public function testWelcome()
     {
         $client = $this->createClient();
 
-        $crawler = $client->request('GET', '/');
+        $crawler = $client->request('GET', $this->route('unsecured'));
         $this->assertContains('This is unsecured.', $crawler->text());
 
-        $crawler = $client->request('GET', '/secured');
+        $crawler = $client->request('GET', $this->route('secured'));
         $crawler = $client->followRedirect();
         $crawler = $client->followRedirect();
         $crawler = $client->followRedirect();
