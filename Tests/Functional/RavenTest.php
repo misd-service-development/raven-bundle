@@ -20,35 +20,23 @@ namespace Misd\RavenBundle\Tests\Functional;
  */
 class RavenTest extends WebTestCase
 {
-    /**
-     * @dataProvider getConfigs
-     */
-    public function testWelcome($config, $insulate)
+    protected static function createClient()
     {
-        $client = $this->createClient(array('test_case' => 'Raven', 'root_config' => $config));
-        if ($insulate) {
-            $client->insulate();
-        }
+        return parent::createClient(array('test_case' => 'Raven', 'root_config' => 'config.yml'));
+    }
+
+    public function testWelcome()
+    {
+        $client = $this->createClient();
 
         $crawler = $client->request('GET', '/');
         $this->assertContains('This is unsecured.', $crawler->text());
-
-        $client->restart();
 
         $crawler = $client->request('GET', '/secured');
         $crawler = $client->followRedirect();
         $crawler = $client->followRedirect();
         $crawler = $client->followRedirect();
         $this->assertContains('This is secured. You are', $crawler->text());
-    }
-
-    public function getConfigs()
-    {
-        return array(
-            // configfile, insulate
-            array('config.yml', true),
-            array('config.yml', false),
-        );
     }
 
     protected function setUp()
