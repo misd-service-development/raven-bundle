@@ -183,16 +183,14 @@ class RavenTest extends WebTestCase
 
     /**
      * @expectedException \Misd\RavenBundle\Exception\LoginTimedOutException
-     * @group slow
      */
     public function testTimedOutResponse()
     {
         $client = $this->createClient();
 
         $client->request('GET', '/secured');
-        $client->request('GET', $client->getResponse()->getTargetUrl());
+        $client->request('GET', $client->getResponse()->getTargetUrl() . '&expired=true');
         $client->followRedirect();
-        sleep(35);
         $client->followRedirect();
     }
 

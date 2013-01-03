@@ -28,6 +28,7 @@ class MainController extends ContainerAware
      *
      * - 'status' defines the expected result
      * - 'problem' defines the expected problem
+     * - 'expired' defines whether the response has already expired
      *
      * @return RedirectResponse
      */
@@ -39,13 +40,14 @@ class MainController extends ContainerAware
             $query->get('ver'),
             $query->get('url'),
             $query->get('status', 200),
-            $query->get('problem')
+            $query->get('problem'),
+            'true' === $query->get('expired')
         );
 
         return new RedirectResponse($redirect);
     }
 
-    protected function createRedirect($ver, $url, $status = 200, $problem = null)
+    protected function createRedirect($ver, $url, $status = 200, $problem = null, $expired = false)
     {
         if (false === in_array($status, array(200, 410, 510, 520, 530, 540, 560, 570, 999))) {
             $status = 200;
@@ -55,7 +57,7 @@ class MainController extends ContainerAware
         $response['ver'] = $ver;
         $response['status'] = $status;
         $response['msg'] = '';
-        $response['issue'] = date('Ymd\THis\Z');
+        $response['issue'] = date('Ymd\THis\Z', $expired ? mktime() - 36001 : mktime());
         $response['id'] = '1351247047-25829-18';
         $response['url'] = $url;
         $response['principal'] = 'test0001';
