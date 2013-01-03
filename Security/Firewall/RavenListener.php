@@ -142,6 +142,6 @@ class RavenListener implements ListenerInterface
         }
         $parameters = '?' . implode('&', $parameters);
 
-        $event->setResponse(new RedirectResponse($this->service->getUrl() . $parameters));
+        $event->setResponse(new RedirectResponse($this->service->getUrl() . $parameters, 303));
     }
 }
