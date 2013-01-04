@@ -23,7 +23,7 @@ class RavenTest extends WebTestCase
     protected static $testCase = 'Raven';
     protected static $config = 'config.yml';
 
-    protected static function createClient()
+    protected static function createClient(array $options = array(), array $server = array())
     {
         return parent::createClient(array('test_case' => self::$testCase, 'root_config' => self::$config));
     }

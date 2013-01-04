@@ -57,7 +57,7 @@ class MainController extends ContainerAware
         $response['ver'] = $ver;
         $response['status'] = $status;
         $response['msg'] = '';
-        $response['issue'] = date('Ymd\THis\Z', $expired ? mktime() - 36001 : mktime());
+        $response['issue'] = date('Ymd\THis\Z', $expired ? time() - 36001 : time());
         $response['id'] = '1351247047-25829-18';
 
         if ('url' === $problem) {
