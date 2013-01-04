@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
@@ -105,15 +104,7 @@ class RavenListener implements ListenerInterface
                     break;
             }
 
-            $returnValue = $this->authenticationManager->authenticate($token);
-
-            if ($returnValue instanceof TokenInterface) {
-                $this->securityContext->setToken($returnValue);
-            } elseif ($returnValue instanceof Response) {
-                $event->setResponse($returnValue);
-            } else {
-                $this->requestAuthentication($event, $request->getUri());
-            }
+            $this->securityContext->setToken($this->authenticationManager->authenticate($token));
         } elseif (
             $this->securityContext->getToken() != null &&
             $this->securityContext->getToken()->getUser() instanceof UserInterface

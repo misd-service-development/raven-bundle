@@ -31,4 +31,11 @@ interface RavenService
      * @return string Raven public-key certificate.
      */
     public function getCertificate();
+
+    /**
+     * Get Raven kid.
+     *
+     * @return int Raven kid.
+     */
+    public function getKid();
 }

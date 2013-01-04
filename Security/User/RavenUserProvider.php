@@ -39,15 +39,19 @@ class RavenUserProvider implements UserProviderInterface
      */
     public function refreshUser(UserInterface $user)
     {
+        // @codeCoverageIgnoreStart
         if (!$user instanceof RavenUser) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
         }
+        // @codeCoverageIgnoreEnd
 
         return $this->loadUserByUsername($user->getUsername());
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function supportsClass($class)
     {

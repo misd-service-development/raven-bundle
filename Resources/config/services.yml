@@ -9,7 +9,7 @@ parameters:
 services:
     raven.security.authentication.provider:
         class: %raven_authentication_provider.class%
-        arguments: ['', @raven_service]
+        arguments: ['', @raven_service, @service_container]
 
     raven.security.authentication.listener:
         class: %raven_listener.class%

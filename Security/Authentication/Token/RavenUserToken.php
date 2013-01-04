@@ -12,6 +12,7 @@
 namespace Misd\RavenBundle\Security\Authentication\Token;
 
 use DateTime;
+use Misd\RavenBundle\Exception\RavenException;
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 
 /**
@@ -44,13 +45,18 @@ class RavenUserToken extends AbstractToken
      * @param string $wlsResponse WLS response.
      *
      * @return RavenUserToken Token.
+     *
+     * @throws RavenException
      */
     public static function factory($wlsResponse)
     {
-        list($ver, $status, $msg, $issue, $id, $url, $principal, $auth, $sso, $life, $params, $kid, $sig) = explode(
-            '!',
-            $wlsResponse
-        );
+        $parts = explode('!', $wlsResponse);
+
+        if (13 <> count($parts)) {
+            throw new RavenException('Invalid number of parts');
+        }
+
+        list($ver, $status, $msg, $issue, $id, $url, $principal, $auth, $sso, $life, $params, $kid, $sig) = $parts;
 
         $token = new RavenUserToken($principal);
 
@@ -63,7 +69,7 @@ class RavenUserToken extends AbstractToken
                 'id' => (string) $id,
                 'url' => (string) $url,
                 'auth' => $auth != '' ? (string) $auth : null,
-                'sso' => (string) $sso,
+                'sso' => $sso != '' ? (string) $sso : null,
                 'life' => $life != '' ? (int) $life : null,
                 'params' => $params != '' ? (string) $params : null,
                 'kid' => (int) $kid,

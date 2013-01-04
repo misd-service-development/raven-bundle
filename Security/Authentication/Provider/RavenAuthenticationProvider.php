@@ -16,10 +16,11 @@ use Misd\RavenBundle\Security\Authentication\Token\RavenUserToken;
 use Misd\RavenBundle\Exception\RavenException;
 use Misd\RavenBundle\Exception\LoginTimedOutException;
 use Misd\RavenBundle\Service\RavenService;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\DependencyInjection\Container;
 
 /**
  * RavenAuthenticationProvider.
@@ -28,19 +29,33 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class RavenAuthenticationProvider implements AuthenticationProviderInterface
 {
+    /**
+     * @var UserProviderInterface
+     */
     private $userProvider;
+
+    /**
+     * @var RavenService
+     */
     private $service;
+
+    /**
+     * @var Request
+     */
+    private $request;
 
     /**
      * Constructor.
      *
      * @param UserProviderInterface $userProvider User provider.
      * @param RavenService          $service      Raven service.
+     * @param Container             $container    Service container.
      */
-    public function __construct(UserProviderInterface $userProvider, RavenService $service)
+    public function __construct(UserProviderInterface $userProvider, RavenService $service, Container $container)
     {
         $this->userProvider = $userProvider;
         $this->service = $service;
+        $this->request = $container->get('request');
     }
 
     /**
@@ -50,19 +65,21 @@ class RavenAuthenticationProvider implements AuthenticationProviderInterface
     {
         if ((time() - $token->getAttribute('issue')->getTimestamp() > 30)) {
             throw new LoginTimedOutException();
+        } elseif (false === $this->validateToken($token)) {
+            throw new RavenException('Invalid Raven response');
+        } elseif ($token->getAttribute('kid') !== $this->service->getKid()) {
+            throw new RavenException('Invalid Raven kid');
+        } elseif ($token->getAttribute('url') !== $this->request->getUri()) {
+            throw new RavenException('URL mismatch');
+        } elseif ('pwd' !== $token->getAttribute('auth') && null !== $token->getAttribute('auth')) {
+            throw new RavenException('Invalid Raven auth');
+        } elseif ('pwd' !== $token->getAttribute('sso') && null === $token->getAttribute('auth')) {
+            throw new RavenException('Invalid Raven sso');
         }
 
         $user = $this->userProvider->loadUserByUsername($token->getUsername());
 
-        if (
-            $user instanceof UserInterface &&
-            200 === $token->getAttribute('status') &&
-            true === $this->validateToken($token)
-        ) {
-            return new RavenUserToken($user, $user->getRoles());
-        }
-
-        throw new RavenException('Raven authentication failed.');
+        return new RavenUserToken($user, $user->getRoles());
     }
 
     /**
@@ -124,10 +141,12 @@ class RavenAuthenticationProvider implements AuthenticationProviderInterface
             case 0:
                 return false;
                 break;
+            // @codeCoverageIgnoreStart
             default:
                 throw new Exception('OpenSSL error');
                 break;
         }
+        // @codeCoverageIgnoreEnd
     }
 
     /**

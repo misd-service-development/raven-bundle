@@ -59,13 +59,38 @@ class MainController extends ContainerAware
         $response['msg'] = '';
         $response['issue'] = date('Ymd\THis\Z', $expired ? mktime() - 36001 : mktime());
         $response['id'] = '1351247047-25829-18';
-        $response['url'] = $url;
+
+        if ('url' === $problem) {
+            $response['url'] = 'http://www.example.com/';
+        } else {
+            $response['url'] = $url;
+        }
+
         $response['principal'] = 'test0001';
-        $response['auth'] = 'pwd';
-        $response['sso'] = '';
+
+        switch ($problem) {
+            case 'auth':
+                $response['auth'] = 'test';
+                $response['sso'] = '';
+                break;
+            case 'sso':
+                $response['auth'] = '';
+                $response['sso'] = 'test';
+                break;
+            default:
+                $response['auth'] = 'pwd';
+                $response['sso'] = '';
+                break;
+        }
+
         $response['life'] = 36000;
         $response['params'] = '';
-        $response['kid'] = 901;
+
+        if ('kid' === $problem) {
+            $response['kid'] = 999;
+        } else {
+            $response['kid'] = 901;
+        }
 
         $data = rawurldecode(
             implode(
@@ -125,9 +150,14 @@ Y6iyl0/GyBRzAXYemQJAVeChw15Lj2/uE7HIDtkqd8POzXjumOxKPfESSHKxRGnP
         $response['url'] = urlencode($response['url']);
         $response['sig'] = $signature;
 
-        if ('invalid' === $problem) {
-            // need an invalid response, so just need to change a value
-            $response['id'] = 12312424;
+        switch ($problem) {
+            case 'invalid':
+                // need an invalid response, so just need to change a value
+                $response['id'] = 12312424;
+                break;
+            case 'incomplete':
+                unset($response['id']);
+                break;
         }
 
         return $url . (false !== strpos($url, '?') ? '&' : '?') . 'WLS-Response=' . implode('!', $response);

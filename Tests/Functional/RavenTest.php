@@ -65,19 +65,6 @@ class RavenTest extends WebTestCase
     }
 
     /**
-     * @expectedException \Misd\RavenBundle\Exception\RavenException
-     */
-    public function test200InvalidResponse()
-    {
-        $client = $this->createClient();
-
-        $client->request('GET', $this->route('secured'));
-        $client->request('GET', $client->getResponse()->getTargetUrl() . '&problem=invalid');
-        $client->followRedirect();
-        $client->followRedirect();
-    }
-
-    /**
      * @expectedException \Misd\RavenBundle\Exception\AuthenticationCancelledException
      */
     public function test410Response()
@@ -190,6 +177,84 @@ class RavenTest extends WebTestCase
 
         $client->request('GET', '/secured');
         $client->request('GET', $client->getResponse()->getTargetUrl() . '&expired=true');
+        $client->followRedirect();
+        $client->followRedirect();
+    }
+
+    /**
+     * @expectedException \Misd\RavenBundle\Exception\RavenException
+     */
+    public function testInvalidResponse()
+    {
+        $client = $this->createClient();
+
+        $client->request('GET', $this->route('secured'));
+        $client->request('GET', $client->getResponse()->getTargetUrl() . '&problem=invalid');
+        $client->followRedirect();
+        $client->followRedirect();
+    }
+
+    /**
+     * @expectedException \Misd\RavenBundle\Exception\RavenException
+     */
+    public function testIncompleteResponse()
+    {
+        $client = $this->createClient();
+
+        $client->request('GET', $this->route('secured'));
+        $client->request('GET', $client->getResponse()->getTargetUrl() . '&problem=incomplete');
+        $client->followRedirect();
+        $client->followRedirect();
+    }
+
+    /**
+     * @expectedException \Misd\RavenBundle\Exception\RavenException
+     */
+    public function testWrongKidResponse()
+    {
+        $client = $this->createClient();
+
+        $client->request('GET', $this->route('secured'));
+        $client->request('GET', $client->getResponse()->getTargetUrl() . '&problem=kid');
+        $client->followRedirect();
+        $client->followRedirect();
+    }
+
+    /**
+     * @expectedException \Misd\RavenBundle\Exception\RavenException
+     */
+    public function testWrongUrlResponse()
+    {
+        $client = $this->createClient();
+
+        $client->request('GET', $this->route('secured'));
+        $client->request('GET', $client->getResponse()->getTargetUrl() . '&problem=url');
+        $client->followRedirect();
+        $client->followRedirect();
+    }
+
+    /**
+     * @expectedException \Misd\RavenBundle\Exception\RavenException
+     */
+    public function testWrongAuthResponse()
+    {
+        $client = $this->createClient();
+
+        $client->request('GET', $this->route('secured'));
+        $client->request('GET', $client->getResponse()->getTargetUrl() . '&problem=auth');
+        $client->followRedirect();
+        $client->followRedirect();
+    }
+
+    /**
+     * @expectedException \Misd\RavenBundle\Exception\RavenException
+     */
+    public function testWrongSsoResponse()
+    {
+        $client = $this->createClient();
+
+        $client->request('GET', $this->route('secured'));
+        $client->request('GET', $client->getResponse()->getTargetUrl() . '&problem=sso');
         $client->followRedirect();
         $client->followRedirect();
     }

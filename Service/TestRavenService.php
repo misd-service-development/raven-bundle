@@ -56,4 +56,12 @@ LSxbGuFG9yfPFIqaSntlYMxKKB5ba/tIAMzyAOHxdEM5hi1DXRsOok3ElWjOw9oN
 wOq24EIbX5LquL9w+uvnfXw=
 -----END CERTIFICATE-----';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getKid()
+    {
+        return 901;
+    }
 }

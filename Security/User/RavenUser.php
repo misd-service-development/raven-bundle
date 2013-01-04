@@ -36,9 +36,11 @@ final class RavenUser implements UserInterface
      */
     public function __construct($username, array $roles = array())
     {
+        // @codeCoverageIgnoreStart
         if (empty($username)) {
             throw new InvalidArgumentException('The username cannot be empty.');
         }
+        // @codeCoverageIgnoreEnd
 
         $this->username = $username;
         $this->roles = $roles;
