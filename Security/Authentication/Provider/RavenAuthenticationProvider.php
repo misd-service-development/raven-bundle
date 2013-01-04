@@ -55,7 +55,9 @@ class RavenAuthenticationProvider implements AuthenticationProviderInterface
     {
         $this->userProvider = $userProvider;
         $this->service = $service;
-        $this->request = $container->get('request');
+        if ($container->isScopeActive('request')) {
+            $this->request = $container->get('request');
+        }
     }
 
     /**
