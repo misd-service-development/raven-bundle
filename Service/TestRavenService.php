@@ -17,7 +17,7 @@ namespace Misd\RavenBundle\Service;
  * @author Chris Wilkinson <chris.wilkinson@admin.cam.ac.uk>
  * @link http://raven.cam.ac.uk/project/test-demo/
  */
-class TestRavenService implements RavenService
+class TestRavenService implements RavenServiceInterface
 {
     /**
      * {@inheritdoc}

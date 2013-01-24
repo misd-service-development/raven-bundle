@@ -15,7 +15,7 @@ use Exception;
 use Misd\RavenBundle\Security\Authentication\Token\RavenUserToken;
 use Misd\RavenBundle\Exception\RavenException;
 use Misd\RavenBundle\Exception\LoginTimedOutException;
-use Misd\RavenBundle\Service\RavenService;
+use Misd\RavenBundle\Service\RavenServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -35,9 +35,9 @@ class RavenAuthenticationProvider implements AuthenticationProviderInterface
     private $userProvider;
 
     /**
-     * @var RavenService
+     * @var RavenServiceInterface
      */
-    private $service;
+    private $raven;
 
     /**
      * @var Request
@@ -48,13 +48,13 @@ class RavenAuthenticationProvider implements AuthenticationProviderInterface
      * Constructor.
      *
      * @param UserProviderInterface $userProvider User provider.
-     * @param RavenService          $service      Raven service.
+     * @param RavenServiceInterface $raven        Raven service.
      * @param Container             $container    Service container.
      */
-    public function __construct(UserProviderInterface $userProvider, RavenService $service, Container $container)
+    public function __construct(UserProviderInterface $userProvider, RavenServiceInterface $raven, Container $container)
     {
         $this->userProvider = $userProvider;
-        $this->service = $service;
+        $this->raven = $raven;
         if ($container->isScopeActive('request')) {
             $this->request = $container->get('request');
         }
@@ -69,7 +69,7 @@ class RavenAuthenticationProvider implements AuthenticationProviderInterface
             throw new LoginTimedOutException();
         } elseif (false === $this->validateToken($token)) {
             throw new RavenException('Invalid Raven response');
-        } elseif ($token->getAttribute('kid') !== $this->service->getKid()) {
+        } elseif ($token->getAttribute('kid') !== $this->raven->getKid()) {
             throw new RavenException('Invalid Raven kid');
         } elseif (rawurldecode($token->getAttribute('url')) !== $this->request->getUri()) {
             throw new RavenException('URL mismatch');
@@ -128,7 +128,7 @@ class RavenAuthenticationProvider implements AuthenticationProviderInterface
             )
         );
 
-        $key = openssl_pkey_get_public($this->service->getCertificate());
+        $key = openssl_pkey_get_public($this->raven->getCertificate());
 
         $result = openssl_verify($data, $sig, $key);
 

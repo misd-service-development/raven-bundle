@@ -12,11 +12,11 @@
 namespace Misd\RavenBundle\Service;
 
 /**
- * RavenService.
+ * RavenServiceInterface.
  *
  * @author Chris Wilkinson <chris.wilkinson@admin.cam.ac.uk>
  */
-interface RavenService
+interface RavenServiceInterface
 {
     /**
      * Get Raven URL.

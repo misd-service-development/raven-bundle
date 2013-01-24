@@ -21,7 +21,7 @@ use Symfony\Component\Security\Http\Firewall\ListenerInterface;
 use Misd\RavenBundle\Exception\RavenException;
 use Misd\RavenBundle\Exception\AuthenticationCancelledException;
 use Misd\RavenBundle\Security\Authentication\Token\RavenUserToken;
-use Misd\RavenBundle\Service\RavenService;
+use Misd\RavenBundle\Service\RavenServiceInterface;
 
 /**
  * RavenListener.
@@ -33,7 +33,7 @@ class RavenListener implements ListenerInterface
     protected $securityContext;
     protected $authenticationManager;
     protected $description;
-    protected $service;
+    protected $raven;
 
     /**
      * Constructor.
@@ -41,18 +41,18 @@ class RavenListener implements ListenerInterface
      * @param SecurityContextInterface       $securityContext       Security context.
      * @param AuthenticationManagerInterface $authenticationManager Authentication manager.
      * @param string                         $description           Resource description.
-     * @param RavenService                   $service               Raven service.
+     * @param RavenServiceInterface          $raven                 Raven service.
      */
     public function __construct(
         SecurityContextInterface $securityContext,
         AuthenticationManagerInterface $authenticationManager,
         $description,
-        RavenService $service
+        RavenServiceInterface $raven
     ) {
         $this->securityContext = $securityContext;
         $this->authenticationManager = $authenticationManager;
         $this->description = $description;
-        $this->service = $service;
+        $this->raven = $raven;
     }
 
     /**
@@ -133,6 +133,6 @@ class RavenListener implements ListenerInterface
         }
         $parameters = '?' . implode('&', $parameters);
 
-        $event->setResponse(new RedirectResponse($this->service->getUrl() . $parameters, 303));
+        $event->setResponse(new RedirectResponse($this->raven->getUrl() . $parameters, 303));
     }
 }

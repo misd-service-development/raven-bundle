@@ -16,7 +16,7 @@ namespace Misd\RavenBundle\Service;
  *
  * @author Chris Wilkinson <chris.wilkinson@admin.cam.ac.uk>
  */
-class LiveRavenService implements RavenService
+class LiveRavenService implements RavenServiceInterface
 {
     /**
      * {@inheritdoc}
