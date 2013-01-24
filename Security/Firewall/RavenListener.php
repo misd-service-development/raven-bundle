@@ -14,6 +14,7 @@ namespace Misd\RavenBundle\Security\Firewall;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -34,6 +35,7 @@ class RavenListener implements ListenerInterface
     protected $authenticationManager;
     protected $description;
     protected $raven;
+    protected $logger;
 
     /**
      * Constructor.
@@ -42,17 +44,21 @@ class RavenListener implements ListenerInterface
      * @param AuthenticationManagerInterface $authenticationManager Authentication manager.
      * @param string                         $description           Resource description.
      * @param RavenServiceInterface          $raven                 Raven service.
+     * @param LoggerInterface|null           $logger                Logger
      */
     public function __construct(
         SecurityContextInterface $securityContext,
         AuthenticationManagerInterface $authenticationManager,
         $description,
-        RavenServiceInterface $raven
-    ) {
+        RavenServiceInterface $raven,
+        LoggerInterface $logger = null
+    )
+    {
         $this->securityContext = $securityContext;
         $this->authenticationManager = $authenticationManager;
         $this->description = $description;
         $this->raven = $raven;
+        $this->logger = $logger;
     }
 
     /**
@@ -68,6 +74,10 @@ class RavenListener implements ListenerInterface
 
             $token = RavenUserToken::factory($session->get('wls_response'));
             $session->remove('wls_response');
+
+            if (null !== $this->logger) {
+                $this->logger->debug('Found WLS response', array('CRSid' => $token->getUsername()));
+            }
 
             switch ($token->getAttribute('status')) {
                 case 200:
@@ -132,6 +142,10 @@ class RavenListener implements ListenerInterface
             $parameters[] = $key . '=' . utf8_encode($val);
         }
         $parameters = '?' . implode('&', $parameters);
+
+        if (null !== $this->logger) {
+            $this->logger->debug('Redirecting to Raven');
+        }
 
         $event->setResponse(new RedirectResponse($this->raven->getUrl() . $parameters, 303));
     }

@@ -17,6 +17,7 @@ use Misd\RavenBundle\Exception\RavenException;
 use Misd\RavenBundle\Exception\LoginTimedOutException;
 use Misd\RavenBundle\Service\RavenServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -45,19 +46,30 @@ class RavenAuthenticationProvider implements AuthenticationProviderInterface
     private $request;
 
     /**
+     * @var LoggerInterface|null
+     */
+    private $logger;
+
+    /**
      * Constructor.
      *
      * @param UserProviderInterface $userProvider User provider.
      * @param RavenServiceInterface $raven        Raven service.
      * @param Container             $container    Service container.
+     * @param LoggerInterface|null  $logger       Logger.
      */
-    public function __construct(UserProviderInterface $userProvider, RavenServiceInterface $raven, Container $container)
-    {
+    public function __construct(
+        UserProviderInterface $userProvider,
+        RavenServiceInterface $raven,
+        Container $container,
+        LoggerInterface $logger = null
+    ) {
         $this->userProvider = $userProvider;
         $this->raven = $raven;
         if ($container->isScopeActive('request')) {
             $this->request = $container->get('request');
         }
+        $this->logger = $logger;
     }
 
     /**
@@ -65,6 +77,10 @@ class RavenAuthenticationProvider implements AuthenticationProviderInterface
      */
     public function authenticate(TokenInterface $token)
     {
+        if (null !== $this->logger) {
+            $this->logger->debug('Testing WLS response');
+        }
+
         if ((time() - $token->getAttribute('issue')->getTimestamp() > 30)) {
             throw new LoginTimedOutException();
         } elseif (false === $this->validateToken($token)) {
@@ -77,6 +93,10 @@ class RavenAuthenticationProvider implements AuthenticationProviderInterface
             throw new RavenException('Invalid Raven auth');
         } elseif ('pwd' !== $token->getAttribute('sso') && null === $token->getAttribute('auth')) {
             throw new RavenException('Invalid Raven sso');
+        }
+
+        if (null !== $this->logger) {
+            $this->logger->debug('WLS response tests passed');
         }
 
         $user = $this->userProvider->loadUserByUsername($token->getUsername());

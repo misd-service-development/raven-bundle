@@ -19,6 +19,8 @@
             <argument/>
             <argument type="service" id="raven_service"/>
             <argument type="service" id="service_container"/>
+            <argument type="service" id="logger" on-invalid="null"/>
+            <tag name="monolog.logger" channel="raven"/>
         </service>
 
         <service id="raven.security.authentication.listener" class="%raven_listener.class%">
@@ -26,6 +28,8 @@
             <argument type="service" id="security.authentication.manager"/>
             <argument type="string">%misd_raven.description%</argument>
             <argument type="service" id="raven_service"/>
+            <argument type="service" id="logger" on-invalid="null"/>
+            <tag name="monolog.logger" channel="raven"/>
         </service>
 
         <service id="raven_user_provider" class="%raven_user_provider.class%"/>
