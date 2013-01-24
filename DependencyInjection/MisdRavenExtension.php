@@ -13,7 +13,7 @@ namespace Misd\RavenBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
@@ -31,8 +31,8 @@ class MisdRavenExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new YamlFileLoader($container, new FileLocator(array(__DIR__ . '/../Resources/config/')));
-        $loader->load('services.yml');
+        $loader = new XmlFileLoader($container, new FileLocator(array(__DIR__ . '/../Resources/config/')));
+        $loader->load('services.xml');
 
         $container->setParameter(
             'misd_raven.description',

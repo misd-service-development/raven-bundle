@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="raven_authentication_provider.class">Misd\RavenBundle\Security\Authentication\Provider\RavenAuthenticationProvider</parameter>
+        <parameter key="raven_listener.class">Misd\RavenBundle\Security\Firewall\RavenListener</parameter>
+        <parameter key="raven_user_provider.class">Misd\RavenBundle\Security\User\RavenUserProvider</parameter>
+        <parameter key="raven_live_service.class">Misd\RavenBundle\Service\LiveRavenService</parameter>
+        <parameter key="raven_test_service.class">Misd\RavenBundle\Service\TestRavenService</parameter>
+        <parameter key="raven_request_listener.class">Misd\RavenBundle\Listener\RavenRequestListener</parameter>
+    </parameters>
+
+    <services>
+
+        <service id="raven.security.authentication.provider" class="%raven_authentication_provider.class%">
+            <argument/>
+            <argument type="service" id="raven_service"/>
+            <argument type="service" id="service_container"/>
+        </service>
+
+        <service id="raven.security.authentication.listener" class="%raven_listener.class%">
+            <argument type="service" id="security.context"/>
+            <argument type="service" id="security.authentication.manager"/>
+            <argument type="string">%misd_raven.description%</argument>
+            <argument type="service" id="raven_service"/>
+        </service>
+
+        <service id="raven_user_provider" class="%raven_user_provider.class%"/>
+
+        <service id="raven_service" class="%raven_service.class%"/>
+
+        <service id="kernel.listener.raven_request" class="%raven_request_listener.class%">
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="9"/>
+        </service>
+
+    </services>
+
+</container>
