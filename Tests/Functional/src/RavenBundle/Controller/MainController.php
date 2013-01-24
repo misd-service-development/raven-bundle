@@ -66,6 +66,8 @@ class MainController extends ContainerAware
             $response['url'] = $url;
         }
 
+        $response['url'] = str_replace(array('%', '!'), array('%25', '%21'), $response['url']);
+
         $response['principal'] = 'test0001';
 
         switch ($problem) {
@@ -92,22 +94,20 @@ class MainController extends ContainerAware
             $response['kid'] = 901;
         }
 
-        $data = rawurldecode(
-            implode(
-                '!',
-                array(
-                    $response['ver'],
-                    $response['status'],
-                    $response['msg'],
-                    $response['issue'],
-                    $response['id'],
-                    $response['url'],
-                    $response['principal'],
-                    $response['auth'],
-                    $response['sso'],
-                    $response['life'],
-                    $response['params'],
-                )
+        $data = implode(
+            '!',
+            array(
+                $response['ver'],
+                $response['status'],
+                $response['msg'],
+                $response['issue'],
+                $response['id'],
+                $response['url'],
+                $response['principal'],
+                $response['auth'],
+                $response['sso'],
+                $response['life'],
+                $response['params'],
             )
         );
         $pkeyid = openssl_pkey_get_private(
@@ -147,7 +147,6 @@ Y6iyl0/GyBRzAXYemQJAVeChw15Lj2/uE7HIDtkqd8POzXjumOxKPfESSHKxRGnP
                 base64_encode($signature)
             );
 
-        $response['url'] = urlencode($response['url']);
         $response['sig'] = $signature;
 
         switch ($problem) {
@@ -160,6 +159,6 @@ Y6iyl0/GyBRzAXYemQJAVeChw15Lj2/uE7HIDtkqd8POzXjumOxKPfESSHKxRGnP
                 break;
         }
 
-        return $url . (false !== strpos($url, '?') ? '&' : '?') . 'WLS-Response=' . implode('!', $response);
+        return $url . (false !== strpos($url, '?') ? '&' : '?') . 'WLS-Response=' . urlencode(implode('!', $response));
     }
 }

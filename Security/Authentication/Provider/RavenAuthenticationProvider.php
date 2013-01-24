@@ -71,7 +71,7 @@ class RavenAuthenticationProvider implements AuthenticationProviderInterface
             throw new RavenException('Invalid Raven response');
         } elseif ($token->getAttribute('kid') !== $this->service->getKid()) {
             throw new RavenException('Invalid Raven kid');
-        } elseif ($token->getAttribute('url') !== $this->request->getUri()) {
+        } elseif (rawurldecode($token->getAttribute('url')) !== $this->request->getUri()) {
             throw new RavenException('URL mismatch');
         } elseif ('pwd' !== $token->getAttribute('auth') && null !== $token->getAttribute('auth')) {
             throw new RavenException('Invalid Raven auth');
@@ -95,22 +95,20 @@ class RavenAuthenticationProvider implements AuthenticationProviderInterface
      */
     protected function validateToken(RavenUserToken $token)
     {
-        $data = rawurldecode(
-            implode(
-                '!',
-                array(
-                    $token->getAttribute('ver'),
-                    $token->getAttribute('status'),
-                    $token->getAttribute('msg'),
-                    $token->getAttribute('issue')->format('Ymd\THis\Z'),
-                    $token->getAttribute('id'),
-                    $token->getAttribute('url'),
-                    $token->getUsername(),
-                    $token->getAttribute('auth'),
-                    $token->getAttribute('sso'),
-                    $token->getAttribute('life'),
-                    $token->getAttribute('params'),
-                )
+        $data = implode(
+            '!',
+            array(
+                $token->getAttribute('ver'),
+                $token->getAttribute('status'),
+                $token->getAttribute('msg'),
+                $token->getAttribute('issue')->format('Ymd\THis\Z'),
+                $token->getAttribute('id'),
+                $token->getAttribute('url'),
+                $token->getUsername(),
+                $token->getAttribute('auth'),
+                $token->getAttribute('sso'),
+                $token->getAttribute('life'),
+                $token->getAttribute('params'),
             )
         );
 

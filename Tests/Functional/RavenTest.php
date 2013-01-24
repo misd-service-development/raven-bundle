@@ -62,6 +62,33 @@ class RavenTest extends WebTestCase
             $this->route('secured', array('param1' => 'foo', 'param2' => 'bar'), true),
             $client->getRequest()->getUri()
         );
+
+        $client->restart();
+
+        $crawler = $client->request('GET', $this->route('secured', array('param[1]' => 'foo', 'param[2]' => 'bar!')));
+        $crawler = $client->followRedirect();
+        $crawler = $client->followRedirect();
+        $crawler = $client->followRedirect();
+        $this->assertContains('This is secured. You are', $crawler->text());
+        $this->assertEquals(
+            $this->route('secured', array('param[1]' => 'foo', 'param[2]' => 'bar!'), true),
+            $client->getRequest()->getUri()
+        );
+
+        $client->restart();
+
+        $crawler = $client->request(
+            'GET',
+            $this->route('secured', array('param%5B1%5D' => 'foo', 'param%5B2%5D' => 'bar%21'))
+        );
+        $crawler = $client->followRedirect();
+        $crawler = $client->followRedirect();
+        $crawler = $client->followRedirect();
+        $this->assertContains('This is secured. You are', $crawler->text());
+        $this->assertEquals(
+            $this->route('secured', array('param%5B1%5D' => 'foo', 'param%5B2%5D' => 'bar%21'), true),
+            $client->getRequest()->getUri()
+        );
     }
 
     /**
