@@ -35,10 +35,7 @@ class RavenFactory implements SecurityFactoryInterface
             ->replaceArgument(0, new Reference($userProvider));
 
         $listenerId = 'security.authentication.listener.raven.' . $id;
-        $listener = $container->setDefinition(
-            $listenerId,
-            new DefinitionDecorator('raven.security.authentication.listener')
-        );
+        $container->setDefinition($listenerId, new DefinitionDecorator('raven.security.listener'));
 
         return array($providerId, $listenerId, $defaultEntryPoint);
     }
