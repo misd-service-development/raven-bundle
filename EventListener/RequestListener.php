@@ -15,11 +15,11 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * RavenRequestListener.
+ * RequestListener.
  *
  * @author Chris Wilkinson <chris.wilkinson@admin.cam.ac.uk>
  */
-class RavenRequestListener
+class RequestListener
 {
     /**
      * Watch for the Raven response, store it in the session and redirect back

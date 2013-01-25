@@ -10,7 +10,7 @@
         <parameter key="raven.user_provider.class">Misd\RavenBundle\Security\User\RavenUserProvider</parameter>
         <parameter key="raven.service.live.class">Misd\RavenBundle\Service\LiveRavenService</parameter>
         <parameter key="raven.service.test.class">Misd\RavenBundle\Service\TestRavenService</parameter>
-        <parameter key="raven.request_listener.class">Misd\RavenBundle\EventListener\RavenRequestListener</parameter>
+        <parameter key="raven.listener.request.class">Misd\RavenBundle\EventListener\RequestListener</parameter>
     </parameters>
 
     <services>
@@ -36,7 +36,7 @@
 
         <service id="raven.service" class="%raven.service.class%"/>
 
-        <service id="kernel.listener.raven_request" class="%raven.request_listener.class%">
+        <service id="kernel.listener.raven.request" class="%raven.listener.request.class%">
             <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="9"/>
         </service>
 
