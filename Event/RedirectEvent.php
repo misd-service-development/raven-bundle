@@ -14,14 +14,24 @@ namespace Misd\RavenBundle\Event;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * RedirectEvent.
+ * Redirecting to Raven event.
  *
  * @author Chris Wilkinson <chris.wilkinson@admin.cam.ac.uk>
  */
 class RedirectEvent extends Event
 {
+    /**
+     * Parameters to send to Raven.
+     *
+     * @var array
+     */
     public $params;
 
+    /**
+     * Constructor.
+     *
+     * @param array $params Parameters to send to Raven.
+     */
     public function __construct(array $params = array())
     {
         $this->params = $params;

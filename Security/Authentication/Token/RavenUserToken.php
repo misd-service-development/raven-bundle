@@ -16,7 +16,9 @@ use Misd\RavenBundle\Exception\RavenException;
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 
 /**
- * RavenUserToken.
+ * Raven user token.
+ *
+ * Contains the information returned by Raven.
  *
  * @author Chris Wilkinson <chris.wilkinson@admin.cam.ac.uk>
  */
@@ -25,7 +27,7 @@ class RavenUserToken extends AbstractToken
     /**
      * Constructor.
      *
-     * @param string $uid   User ID.
+     * @param string $uid   CRSid.
      * @param array  $roles Roles.
      */
     public function __construct($uid = '', array $roles = array())
@@ -40,13 +42,13 @@ class RavenUserToken extends AbstractToken
     }
 
     /**
-     * Build a token from a WLS response.
+     * Build a user token from a WLS response.
      *
      * @param string $wlsResponse WLS response.
      *
-     * @return RavenUserToken Token.
+     * @return RavenUserToken User token.
      *
-     * @throws RavenException
+     * @throws RavenException If there is a problem with the token.
      */
     public static function factory($wlsResponse)
     {

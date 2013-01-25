@@ -14,18 +14,23 @@ namespace Misd\RavenBundle\EventListener;
 use Misd\RavenBundle\Event\RedirectEvent;
 
 /**
- * RedirectListener.
+ * Redirect to Raven event listener.
  *
  * @author Chris Wilkinson <chris.wilkinson@admin.cam.ac.uk>
  */
 class RedirectListener
 {
+    /**
+     * Site description.
+     *
+     * @var string|null
+     */
     private $description;
 
     /**
      * Constructor.
      *
-     * @param string|null $description Site description.
+     * @param string|null $description Site description to send to Raven.
      */
     public function __construct($description)
     {
@@ -33,7 +38,7 @@ class RedirectListener
     }
 
     /**
-     * Listen for the Raven redirect event and add the site description.
+     * Add the site description to the parameters sent to Raven.
      *
      * @param RedirectEvent $event Redirect event.
      */

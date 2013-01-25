@@ -12,7 +12,7 @@
 namespace Misd\RavenBundle\Service;
 
 /**
- * LiveRavenService.
+ * Live Raven service.
  *
  * @author Chris Wilkinson <chris.wilkinson@admin.cam.ac.uk>
  */

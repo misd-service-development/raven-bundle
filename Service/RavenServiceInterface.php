@@ -12,7 +12,7 @@
 namespace Misd\RavenBundle\Service;
 
 /**
- * RavenServiceInterface.
+ * Raven service interface.
  *
  * @author Chris Wilkinson <chris.wilkinson@admin.cam.ac.uk>
  */

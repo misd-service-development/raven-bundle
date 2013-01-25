@@ -12,7 +12,10 @@
 namespace Misd\RavenBundle\Service;
 
 /**
- * TestRavenService.
+ * Test Raven service.
+ *
+ * This service is to only be used for testing and development, using it
+ * elsewhere might compromise your application.
  *
  * @author Chris Wilkinson <chris.wilkinson@admin.cam.ac.uk>
  * @link http://raven.cam.ac.uk/project/test-demo/

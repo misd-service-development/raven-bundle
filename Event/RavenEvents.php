@@ -12,11 +12,14 @@
 namespace Misd\RavenBundle\Event;
 
 /**
- * RavenEvents.
+ * Raven bundle events.
  *
  * @author Chris Wilkinson <chris.wilkinson@admin.cam.ac.uk>
  */
 final class RavenEvents
 {
+    /**
+     * Redirect to Raven.
+     */
     const REDIRECT = 'raven.redirect';
 }

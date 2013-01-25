@@ -16,7 +16,7 @@ use Misd\RavenBundle\Security\Authentication\Token\RavenUserToken,
     Misd\RavenBundle\Security\User\RavenUser;
 
 /**
- * RavenUserToken test.
+ * RavenUser token test.
  *
  * @author Chris Wilkinson <chris.wilkinson@admin.cam.ac.uk>
  */

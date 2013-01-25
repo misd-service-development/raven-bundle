@@ -15,7 +15,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
- * Configuration.
+ * MisdRavenBundle configuration.
  *
  * @author Chris Wilkinson <chris.wilkinson@admin.cam.ac.uk>
  */

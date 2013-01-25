@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
- * MisdRavenExtension.
+ * MisdRavenBundle extension.
  *
  * @author Chris Wilkinson <chris.wilkinson@admin.cam.ac.uk>
  */

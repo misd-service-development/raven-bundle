@@ -24,28 +24,36 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\DependencyInjection\Container;
 
 /**
- * RavenAuthenticationProvider.
+ * Raven authentication provider.
  *
  * @author Chris Wilkinson <chris.wilkinson@admin.cam.ac.uk>
  */
 class RavenAuthenticationProvider implements AuthenticationProviderInterface
 {
     /**
+     * User provider.
+     *
      * @var UserProviderInterface
      */
     private $userProvider;
 
     /**
+     * Raven service.
+     *
      * @var RavenServiceInterface
      */
     private $raven;
 
     /**
+     * Request.
+     *
      * @var Request
      */
     private $request;
 
     /**
+     * Logger, or null.
+     *
      * @var LoggerInterface|null
      */
     private $logger;
@@ -63,7 +71,8 @@ class RavenAuthenticationProvider implements AuthenticationProviderInterface
         RavenServiceInterface $raven,
         Container $container,
         LoggerInterface $logger = null
-    ) {
+    )
+    {
         $this->userProvider = $userProvider;
         $this->raven = $raven;
         if ($container->isScopeActive('request')) {
@@ -105,15 +114,15 @@ class RavenAuthenticationProvider implements AuthenticationProviderInterface
     }
 
     /**
-     * Validate RavenUserToken.
+     * Validate a Raven user token.
      *
-     * @param RavenUserToken $token Raven user token.
+     * @param TokenInterface $token Raven user token.
      *
      * @return bool true if the token is valid, false otherwise.
      *
-     * @throws Exception
+     * @throws Exception If there is an OpenSSL problem.
      */
-    protected function validateToken(RavenUserToken $token)
+    protected function validateToken(TokenInterface $token)
     {
         $data = implode(
             '!',

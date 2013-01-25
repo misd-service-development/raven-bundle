@@ -14,8 +14,6 @@ namespace Misd\RavenBundle\Exception;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
- * RavenException.
- *
  * Thrown when Raven returns anything other than a successful authentication.
  *
  * @author Chris Wilkinson <chris.wilkinson@admin.cam.ac.uk>

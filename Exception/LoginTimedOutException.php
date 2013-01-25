@@ -14,14 +14,15 @@ namespace Misd\RavenBundle\Exception;
 use Exception;
 
 /**
- * LoginTimedOutException.
- *
  * Thrown when the user cancels the Raven authentication process.
  *
  * @author Chris Wilkinson <chris.wilkinson@admin.cam.ac.uk>
  */
 class LoginTimedOutException extends RavenException
 {
+    /**
+     * {@inheritdoc}
+     */
     public function __construct($extraInformation = null, $code = 0, Exception $previous = null)
     {
         parent::__construct('The login attempt has timed out', $extraInformation, $code, $previous);

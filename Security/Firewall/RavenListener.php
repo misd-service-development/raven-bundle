@@ -34,10 +34,39 @@ use Misd\RavenBundle\Service\RavenServiceInterface;
  */
 class RavenListener implements ListenerInterface
 {
+    /**
+     * Security context.
+     *
+     * @var SecurityContextInterface
+     */
     protected $securityContext;
+
+    /**
+     * Authentication manager.
+     *
+     * @var AuthenticationManagerInterface
+     */
     protected $authenticationManager;
+
+    /**
+     * Event dispatcher.
+     *
+     * @var EventDispatcherInterface
+     */
     protected $dispatcher;
+
+    /**
+     * Raven service.
+     *
+     * @var RavenServiceInterface
+     */
     protected $raven;
+
+    /**
+     * Logger, or null.
+     *
+     * @var LoggerInterface|null
+     */
     protected $logger;
 
     /**

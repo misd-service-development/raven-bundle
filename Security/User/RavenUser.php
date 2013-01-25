@@ -23,7 +23,18 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 final class RavenUser implements UserInterface
 {
+    /**
+     * Username (=CRSid).
+     *
+     * @var string
+     */
     private $username;
+
+    /**
+     * Roles.
+     *
+     * @var array
+     */
     private $roles;
 
     /**
@@ -32,7 +43,7 @@ final class RavenUser implements UserInterface
      * @param string $username Username (=CRSid).
      * @param array  $roles    Roles.
      *
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException If the username is empty.
      */
     public function __construct($username, array $roles = array())
     {
