@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Misd\RavenBundle\Listener;
+namespace Misd\RavenBundle\EventListener;
 
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;

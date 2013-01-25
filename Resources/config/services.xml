@@ -10,7 +10,7 @@
         <parameter key="raven_user_provider.class">Misd\RavenBundle\Security\User\RavenUserProvider</parameter>
         <parameter key="raven_live_service.class">Misd\RavenBundle\Service\LiveRavenService</parameter>
         <parameter key="raven_test_service.class">Misd\RavenBundle\Service\TestRavenService</parameter>
-        <parameter key="raven_request_listener.class">Misd\RavenBundle\Listener\RavenRequestListener</parameter>
+        <parameter key="raven_request_listener.class">Misd\RavenBundle\EventListener\RavenRequestListener</parameter>
     </parameters>
 
     <services>
