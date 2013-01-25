@@ -11,6 +11,12 @@
 
 namespace Misd\RavenBundle\Security\Firewall;
 
+use Misd\RavenBundle\Event\RavenEvents;
+use Misd\RavenBundle\Event\RedirectEvent;
+use Misd\RavenBundle\Exception\AuthenticationCancelledException;
+use Misd\RavenBundle\Exception\RavenException;
+use Misd\RavenBundle\Security\Authentication\Token\RavenUserToken;
+use Misd\RavenBundle\Service\RavenServiceInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,12 +26,6 @@ use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterfac
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
-use Misd\RavenBundle\Event\RavenEvents;
-use Misd\RavenBundle\Event\RedirectEvent;
-use Misd\RavenBundle\Exception\RavenException;
-use Misd\RavenBundle\Exception\AuthenticationCancelledException;
-use Misd\RavenBundle\Security\Authentication\Token\RavenUserToken;
-use Misd\RavenBundle\Service\RavenServiceInterface;
 
 /**
  * RavenListener.

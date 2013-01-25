@@ -11,18 +11,17 @@
 
 namespace Misd\RavenBundle\Security\Authentication\Provider;
 
-use Exception;
-use Misd\RavenBundle\Security\Authentication\Token\RavenUserToken;
+use Misd\RavenBundle\Exception\LoginTimedOutException;
 use Misd\RavenBundle\Exception\OpenSslException;
 use Misd\RavenBundle\Exception\RavenException;
-use Misd\RavenBundle\Exception\LoginTimedOutException;
+use Misd\RavenBundle\Security\Authentication\Token\RavenUserToken;
 use Misd\RavenBundle\Service\RavenServiceInterface;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\DependencyInjection\Container;
 
 /**
  * Raven authentication provider.

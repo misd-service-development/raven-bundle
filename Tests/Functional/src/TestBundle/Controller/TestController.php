@@ -11,8 +11,8 @@
 
 namespace Misd\RavenBundle\Tests\Functional\src\TestBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * TestController.

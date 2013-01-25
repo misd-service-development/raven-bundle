@@ -12,8 +12,8 @@
 namespace Misd\RavenBundle\Test\Security\Authentication\Token;
 
 use PHPUnit_Framework_TestCase;
-use Misd\RavenBundle\Security\Authentication\Token\RavenUserToken,
-    Misd\RavenBundle\Security\User\RavenUser;
+use Misd\RavenBundle\Security\Authentication\Token\RavenUserToken;
+use Misd\RavenBundle\Security\User\RavenUser;
 
 /**
  * RavenUser token test.
