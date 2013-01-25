@@ -13,6 +13,7 @@ namespace Misd\RavenBundle\Security\Authentication\Provider;
 
 use Exception;
 use Misd\RavenBundle\Security\Authentication\Token\RavenUserToken;
+use Misd\RavenBundle\Exception\OpenSslException;
 use Misd\RavenBundle\Exception\RavenException;
 use Misd\RavenBundle\Exception\LoginTimedOutException;
 use Misd\RavenBundle\Service\RavenServiceInterface;
@@ -120,10 +121,16 @@ class RavenAuthenticationProvider implements AuthenticationProviderInterface
      *
      * @return bool true if the token is valid, false otherwise.
      *
-     * @throws Exception If there is an OpenSSL problem.
+     * @throws OpenSslException If there is an OpenSSL problem.
      */
     protected function validateToken(TokenInterface $token)
     {
+        // @codeCoverageIgnoreStart
+        if (false === function_exists('openssl_verify')) {
+            throw new OpenSslException('OpenSSL is unavailable');
+        }
+        // @codeCoverageIgnoreEnd
+
         $data = implode(
             '!',
             array(
@@ -172,7 +179,7 @@ class RavenAuthenticationProvider implements AuthenticationProviderInterface
                 break;
             // @codeCoverageIgnoreStart
             default:
-                throw new Exception('OpenSSL error');
+                throw new OpenSslException('OpenSSL has returned a error when verifying the signature');
                 break;
         }
         // @codeCoverageIgnoreEnd

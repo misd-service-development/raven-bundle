@@ -144,6 +144,10 @@ This is thrown if something has gone wrong with either the bundle or Raven itsel
 
 * `Misd\RavenBundle\Exception\LoginTimedOutException`: If the Raven response is older than 30 seconds.
 
+### `Misd\RavenBundle\Exception\OpenSslException`
+
+This is thrown if there is an OpenSSL problem.
+
 Events
 ------
 
