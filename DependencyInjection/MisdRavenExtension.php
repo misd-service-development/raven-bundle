@@ -34,18 +34,15 @@ class MisdRavenExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(array(__DIR__ . '/../Resources/config/')));
         $loader->load('services.xml');
 
-        $container->setParameter(
-            'misd_raven.description',
-            isset($config['description']) ? $config['description'] : null
-        );
-        $container->setParameter('misd_raven.test_service', $config['use_test_service']);
+        $container->setParameter('raven.description', isset($config['description']) ? $config['description'] : null);
+        $container->setParameter('raven.service.test', $config['use_test_service']);
 
-        if (true === $container->getParameter('misd_raven.test_service')) {
-            $service = $container->getParameter('raven_test_service.class');
+        if (true === $container->getParameter('raven.service.test')) {
+            $service = $container->getParameter('raven.service.test.class');
         } else {
-            $service = $container->getParameter('raven_live_service.class'); //@codeCoverageIgnore
+            $service = $container->getParameter('raven.service.live.class'); //@codeCoverageIgnore
         } //@codeCoverageIgnore
 
-        $container->setParameter('raven_service.class', $service);
+        $container->setParameter('raven.service.class', $service);
     }
 }

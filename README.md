@@ -83,7 +83,7 @@ If you would like any user who has successfully authenticated with Raven to acce
     security:
         providers:
             raven:
-                id: raven_user_provider
+                id: raven.user_provider
 
 The user provider returns an instance of `Misd\RavenBundle\Security\User\RavenUser` with the role `ROLE_USER`.
 
@@ -101,7 +101,7 @@ This can be chained with other providers to grant certain users extra roles. For
                     users:
                         abc123: { roles: [ 'ROLE_ADMIN' ] }
             raven:
-                id: raven_user_provider
+                id: raven.user_provider
 
 ### Resource description
 

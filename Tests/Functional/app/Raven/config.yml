@@ -4,7 +4,7 @@ imports:
 security:
     providers:
         raven:
-            id: raven_user_provider
+            id: raven.user_provider
     firewalls:
         raven_secured:
             pattern: ^/secured(/.*)?
