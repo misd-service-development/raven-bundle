@@ -11,6 +11,7 @@
 
 namespace Misd\RavenBundle\Security\Firewall;
 
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -19,6 +20,8 @@ use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterfac
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
+use Misd\RavenBundle\Event\RavenEvents;
+use Misd\RavenBundle\Event\RedirectEvent;
 use Misd\RavenBundle\Exception\RavenException;
 use Misd\RavenBundle\Exception\AuthenticationCancelledException;
 use Misd\RavenBundle\Security\Authentication\Token\RavenUserToken;
@@ -33,7 +36,7 @@ class RavenListener implements ListenerInterface
 {
     protected $securityContext;
     protected $authenticationManager;
-    protected $description;
+    protected $dispatcher;
     protected $raven;
     protected $logger;
 
@@ -42,21 +45,21 @@ class RavenListener implements ListenerInterface
      *
      * @param SecurityContextInterface       $securityContext       Security context.
      * @param AuthenticationManagerInterface $authenticationManager Authentication manager.
-     * @param string                         $description           Resource description.
+     * @param EventDispatcherInterface       $dispatcher            Event dispatcher.
      * @param RavenServiceInterface          $raven                 Raven service.
      * @param LoggerInterface|null           $logger                Logger
      */
     public function __construct(
         SecurityContextInterface $securityContext,
         AuthenticationManagerInterface $authenticationManager,
-        $description,
+        EventDispatcherInterface $dispatcher,
         RavenServiceInterface $raven,
         LoggerInterface $logger = null
     )
     {
         $this->securityContext = $securityContext;
         $this->authenticationManager = $authenticationManager;
-        $this->description = $description;
+        $this->dispatcher = $dispatcher;
         $this->raven = $raven;
         $this->logger = $logger;
     }
@@ -128,18 +131,18 @@ class RavenListener implements ListenerInterface
     /**
      * Request Raven authentication.
      *
-     * @param GetResponseEvent $event Get response event.
-     * @param string           $url   Redirect URL.
+     * @param GetResponseEvent $responseEvent Get response event.
+     * @param string           $url           Redirect URL.
      */
-    protected function requestAuthentication(GetResponseEvent $event, $url)
+    protected function requestAuthentication(GetResponseEvent $responseEvent, $url)
     {
-        $params['ver'] = 2;
-        $params['url'] = urlencode($url);
-        $params['desc'] = urlencode($this->description);
+        $redirectEvent = new RedirectEvent(array('ver' => 2, 'url' => $url));
+
+        $this->dispatcher->dispatch(RavenEvents::REDIRECT, $redirectEvent);
 
         $parameters = array();
-        foreach ($params as $key => $val) {
-            $parameters[] = $key . '=' . utf8_encode($val);
+        foreach ($redirectEvent->params as $key => $val) {
+            $parameters[] = $key . '=' . utf8_encode(urlencode($val));
         }
         $parameters = '?' . implode('&', $parameters);
 
@@ -147,6 +150,6 @@ class RavenListener implements ListenerInterface
             $this->logger->debug('Redirecting to Raven');
         }
 
-        $event->setResponse(new RedirectResponse($this->raven->getUrl() . $parameters, 303));
+        $responseEvent->setResponse(new RedirectResponse($this->raven->getUrl() . $parameters, 303));
     }
 }

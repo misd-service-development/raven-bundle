@@ -143,3 +143,18 @@ This is thrown if the user is not provisioned. If you're using the Raven user pr
 This is thrown if something has gone wrong with either the bundle or Raven itself. As this is an exceptional state, you probably won't need to catch it (and let the `500 Internal Server Error` be returned). It has the following sub-types:
 
 * `Misd\RavenBundle\Exception\LoginTimedOutException`: If the Raven response is older than 30 seconds.
+
+Events
+------
+
+To listen for events that the bundle issues, create a normal event subscriber service:
+
+    <service id="%my_listener.id%" class="%my_listener.class%">
+        <tag name="kernel.event_listener" event="%raven_event%" method="%my_listener.method%"/>
+    </service>
+
+The bundle issues the following events:
+
+### `raven.redirect`
+
+The `Misd\RavenBundle\Event\RedirectEvent` object contains the parameters given to Raven when the user is redirected to the login page. You could, for example, add the `msg` parameter.

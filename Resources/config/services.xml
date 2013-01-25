@@ -11,6 +11,7 @@
         <parameter key="raven.service.live.class">Misd\RavenBundle\Service\LiveRavenService</parameter>
         <parameter key="raven.service.test.class">Misd\RavenBundle\Service\TestRavenService</parameter>
         <parameter key="raven.listener.request.class">Misd\RavenBundle\EventListener\RequestListener</parameter>
+        <parameter key="raven.listener.redirect.class">Misd\RavenBundle\EventListener\RedirectListener</parameter>
     </parameters>
 
     <services>
@@ -28,7 +29,7 @@
         <service id="raven.security.authentication.listener" class="%raven.listener.class%" public="false">
             <argument type="service" id="security.context"/>
             <argument type="service" id="security.authentication.manager"/>
-            <argument type="string">%raven.description%</argument>
+            <argument type="service" id="event_dispatcher"/>
             <argument type="service" id="raven.service"/>
             <argument type="service" id="logger" on-invalid="null"/>
             <tag name="monolog.logger" channel="raven"/>
@@ -40,6 +41,11 @@
 
         <service id="kernel.listener.raven.request" class="%raven.listener.request.class%">
             <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="9"/>
+        </service>
+
+        <service id="kernel.listener.raven.redirect" class="%raven.listener.redirect.class%">
+            <tag name="kernel.event_listener" event="raven.redirect" method="onRavenRedirect"/>
+            <argument type="string">%raven.description%</argument>
         </service>
 
     </services>
