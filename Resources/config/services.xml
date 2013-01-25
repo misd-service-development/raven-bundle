@@ -15,7 +15,9 @@
 
     <services>
 
-        <service id="raven.security.authentication.provider" class="%raven.authentication_provider.class%">
+        <service id="raven.security.authentication.provider"
+                 class="%raven.authentication_provider.class%"
+                 public="false">
             <argument/>
             <argument type="service" id="raven.service"/>
             <argument type="service" id="service_container"/>
@@ -23,7 +25,7 @@
             <tag name="monolog.logger" channel="raven"/>
         </service>
 
-        <service id="raven.security.authentication.listener" class="%raven.listener.class%">
+        <service id="raven.security.authentication.listener" class="%raven.listener.class%" public="false">
             <argument type="service" id="security.context"/>
             <argument type="service" id="security.authentication.manager"/>
             <argument type="string">%raven.description%</argument>
@@ -32,9 +34,9 @@
             <tag name="monolog.logger" channel="raven"/>
         </service>
 
-        <service id="raven.user_provider" class="%raven.user_provider.class%"/>
+        <service id="raven.user_provider" class="%raven.user_provider.class%" public="false"/>
 
-        <service id="raven.service" class="%raven.service.class%"/>
+        <service id="raven.service" class="%raven.service.class%" public="false"/>
 
         <service id="kernel.listener.raven.request" class="%raven.listener.request.class%">
             <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" priority="9"/>
