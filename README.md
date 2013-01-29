@@ -31,7 +31,7 @@ Installation
            // ...
            "require": {
                // ...
-               "misd/raven-bundle": "dev-master"
+               "misd/raven-bundle": "1.0.*"
            }
         }
 
