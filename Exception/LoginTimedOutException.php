@@ -23,8 +23,8 @@ class LoginTimedOutException extends RavenException
     /**
      * {@inheritdoc}
      */
-    public function __construct($extraInformation = null, $code = 0, Exception $previous = null)
+    public function __construct($code = 0, Exception $previous = null)
     {
-        parent::__construct('The login attempt has timed out', $extraInformation, $code, $previous);
+        parent::__construct('The login attempt has timed out', $code, $previous);
     }
 }

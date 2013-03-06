@@ -16,7 +16,7 @@ use Misd\RavenBundle\Exception\OpenSslException;
 use Misd\RavenBundle\Exception\RavenException;
 use Misd\RavenBundle\Security\Authentication\Token\RavenUserToken;
 use Misd\RavenBundle\Service\RavenServiceInterface;
-use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
@@ -45,11 +45,11 @@ class RavenAuthenticationProvider implements AuthenticationProviderInterface
     private $raven;
 
     /**
-     * Request.
+     * Container.
      *
-     * @var Request
+     * @var ContainerInterface
      */
-    private $request;
+    private $container;
 
     /**
      * Logger, or null.
@@ -63,21 +63,19 @@ class RavenAuthenticationProvider implements AuthenticationProviderInterface
      *
      * @param UserProviderInterface $userProvider User provider.
      * @param RavenServiceInterface $raven        Raven service.
-     * @param Container             $container    Service container.
+     * @param ContainerInterface    $container    Service container.
      * @param LoggerInterface|null  $logger       Logger.
      */
     public function __construct(
         UserProviderInterface $userProvider,
         RavenServiceInterface $raven,
-        Container $container,
+        ContainerInterface $container,
         LoggerInterface $logger = null
     )
     {
         $this->userProvider = $userProvider;
         $this->raven = $raven;
-        if ($container->isScopeActive('request')) {
-            $this->request = $container->get('request');
-        }
+        $this->container = $container;
         $this->logger = $logger;
     }
 
@@ -96,7 +94,7 @@ class RavenAuthenticationProvider implements AuthenticationProviderInterface
             throw new RavenException('Invalid Raven response');
         } elseif ($token->getAttribute('kid') !== $this->raven->getKid()) {
             throw new RavenException('Invalid Raven kid');
-        } elseif (rawurldecode($token->getAttribute('url')) !== $this->request->getUri()) {
+        } elseif (rawurldecode($token->getAttribute('url')) !== $this->container->get('request')->getUri()) {
             throw new RavenException('URL mismatch');
         } elseif ('pwd' !== $token->getAttribute('auth') && null !== $token->getAttribute('auth')) {
             throw new RavenException('Invalid Raven auth');

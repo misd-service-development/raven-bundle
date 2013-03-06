@@ -142,7 +142,7 @@ class RavenListener implements ListenerInterface
                             $message = null;
                             break;
                     }
-                    throw new RavenException($message, null, $token->getAttribute('status'));
+                    throw new RavenException($message, $token->getAttribute('status'));
                     break;
             }
 

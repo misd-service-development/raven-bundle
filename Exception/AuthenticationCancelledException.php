@@ -24,8 +24,8 @@ class AuthenticationCancelledException extends AuthenticationException
     /**
      * {@inheritdoc}
      */
-    public function __construct($extraInformation = null, $code = 0, Exception $previous = null)
+    public function __construct($code = 0, Exception $previous = null)
     {
-        parent::__construct('The user cancelled the authentication request', $extraInformation, $code, $previous);
+        parent::__construct('The user cancelled the authentication request', $code, $previous);
     }
 }
