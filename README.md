@@ -17,7 +17,7 @@ The bundle uses code based on the [UcamWebauth PHP class](https://wiki.cam.ac.uk
 Requirements
 ------------
 
-* [Symfony 2.1](http://symfony.com/)
+* [Symfony 2](http://symfony.com/)
 * [PHP OpenSSL library](http://www.php.net/manual/en/book.openssl.php)
 
 Installation
@@ -31,7 +31,7 @@ Installation
            // ...
            "require": {
                // ...
-               "misd/raven-bundle": "1.0.*"
+               "misd/raven-bundle": "~1.0"
            }
         }
 
