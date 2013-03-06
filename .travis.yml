@@ -6,8 +6,8 @@ php:
   - 5.4
 
 env:
-  - SYMFONY_VERSION="2.1.0"
-  - SYMFONY_VERSION="~2.1"
+  - SYMFONY_VERSION="2.1.5" # can't test against earlier versions due to https://github.com/symfony/symfony/pull/6362
+  - SYMFONY_VERSION="2.1.*"
 
 before_script:
   - composer require symfony/framework-bundle:${SYMFONY_VERSION} --no-update
