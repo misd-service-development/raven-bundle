@@ -31,5 +31,10 @@
             "Misd\\RavenBundle":""
         }
     },
-    "target-dir":"Misd/RavenBundle"
+    "target-dir":"Misd/RavenBundle",
+    "extra":{
+        "branch-alias":{
+            "dev-master":"1.1-dev"
+        }
+    }
 }
