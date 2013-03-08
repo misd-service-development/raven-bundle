@@ -162,3 +162,7 @@ The bundle issues the following events:
 ### `raven.redirect`
 
 The `Misd\RavenBundle\Event\RedirectEvent` object contains the parameters given to Raven when the user is redirected to the login page. You could, for example, add the `msg` parameter.
+
+### `raven.login`
+
+The `Symfony\Component\Security\Http\Event\InteractiveLoginEvent` object contains the request and the authentication token following a successful Raven login.
