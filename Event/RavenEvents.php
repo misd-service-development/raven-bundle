@@ -22,4 +22,9 @@ final class RavenEvents
      * Redirect to Raven.
      */
     const REDIRECT = 'raven.redirect';
+
+    /**
+     * Successful Raven login.
+     */
+    const LOGIN = 'raven.login';
 }

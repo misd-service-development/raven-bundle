@@ -25,6 +25,7 @@ use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
 
 /**
@@ -146,7 +147,10 @@ class RavenListener implements ListenerInterface
                     break;
             }
 
-            $this->securityContext->setToken($this->authenticationManager->authenticate($token));
+            $token = $this->authenticationManager->authenticate($token);
+
+            $this->securityContext->setToken($token);
+            $this->dispatcher->dispatch(RavenEvents::LOGIN, new InteractiveLoginEvent($request, $token));
         } elseif (
             $this->securityContext->getToken() != null &&
             $this->securityContext->getToken()->getUser() instanceof UserInterface
