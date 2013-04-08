@@ -1,35 +1,35 @@
 {
-    "name":"misd/raven-bundle",
-    "type":"symfony-bundle",
-    "description":"Adds Raven authentication to your Symfony2 application",
-    "keywords":["authentication", "bundle", "University of Cambridge"],
-    "homepage":"https://github.com/misd-service-development/raven-bundle",
-    "license":"MIT",
-    "authors":[
+    "name": "misd/raven-bundle",
+    "type": "symfony-bundle",
+    "description": "Adds Raven authentication to your Symfony2 application",
+    "keywords": ["authentication", "bundle", "University of Cambridge"],
+    "homepage": "https://github.com/misd-service-development/raven-bundle",
+    "license": "MIT",
+    "authors": [
         {
-            "name":"Chris Wilkinson",
-            "email":"chris.wilkinson@admin.cam.ac.uk"
+            "name": "Chris Wilkinson",
+            "email": "chris.wilkinson@admin.cam.ac.uk"
         }
     ],
-    "support":{
-        "issues":"https://github.com/misd-service-development/raven-bundle/issues"
+    "support": {
+        "issues": "https://github.com/misd-service-development/raven-bundle/issues"
     },
-    "require":{
-        "php":">=5.3.3",
-        "ext-openssl":"*",
-        "symfony/framework-bundle":"2.1.*",
-        "symfony/security-bundle":"2.1.*"
+    "require": {
+        "php": ">=5.3.3",
+        "ext-openssl": "*",
+        "symfony/framework-bundle": "2.1.*",
+        "symfony/security-bundle": "2.1.*"
     },
-    "require-dev":{
-        "symfony/browser-kit":"2.1.*",
-        "symfony/form":"2.1.*",
-        "symfony/process":"2.1.*",
-        "symfony/yaml":"2.1.*"
+    "require-dev": {
+        "symfony/browser-kit": "2.1.*",
+        "symfony/form": "2.1.*",
+        "symfony/process": "2.1.*",
+        "symfony/yaml": "2.1.*"
     },
-    "autoload":{
-        "psr-0":{
-            "Misd\\RavenBundle":""
+    "autoload": {
+        "psr-0": {
+            "Misd\\RavenBundle": ""
         }
     },
-    "target-dir":"Misd/RavenBundle"
+    "target-dir": "Misd/RavenBundle"
 }
