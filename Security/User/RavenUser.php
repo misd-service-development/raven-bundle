@@ -21,7 +21,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *
  * @author Chris Wilkinson <chris.wilkinson@admin.cam.ac.uk>
  */
-final class RavenUser implements UserInterface
+class RavenUser implements UserInterface
 {
     /**
      * Username (=CRSid).
