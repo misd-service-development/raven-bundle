@@ -10,16 +10,14 @@ php:
 matrix:
     allow_failures:
         - php: hhvm
-
-env:
-  - SYMFONY_VERSION="2.2.0"
-  - SYMFONY_VERSION="~2.2"
+    include:
+        - php: 5.3
+          env: dependencies=lowest
 
 before_install:
-  - composer require symfony/framework-bundle:${SYMFONY_VERSION} --no-update --no-interaction
-  - composer require symfony/security-bundle:${SYMFONY_VERSION} --no-update --no-interaction
+  - composer self-update
 
 install:
-  - composer install --dev --prefer-source --no-interaction
+  - if [ "$dependencies" = "lowest" ]; then composer update --dev --prefer-lowest --prefer-stable --prefer-source --no-interaction; else composer install --dev --prefer-source --no-interaction; fi;
 
 script: ./vendor/bin/phpunit --coverage-text
